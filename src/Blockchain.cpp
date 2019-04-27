@@ -33,6 +33,11 @@ string Blockchain::getHashPrevBlock() {
   return hash;
 }
 
+//To get the actual target
+string Blockchain::getTarget() {
+  return this->target;
+}
+
 //To print the block chain in the console
 void Blockchain::displayChain() {
   if (head != NULL) {
