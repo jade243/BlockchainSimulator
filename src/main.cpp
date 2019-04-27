@@ -3,10 +3,13 @@
 #include "BlockHeader.cpp"
 #include "Block.cpp"
 #include "Blockchain.cpp"
+#include "TransactionsGenerator.cpp"
 #include <experimental/random>
 
 #define MIN 0
 #define MAX (int)(pow(2, 32)-1)
+#define MEMPOOL "transactionsList.txt"
+#define TX_PER_BLOCK 10
 
 using namespace std;
 
@@ -27,25 +30,56 @@ void mine(Block* block) {
   }
 }
 
+void fillBlock(Block* block) {
+
+  ofstream newMemPool;
+  newMemPool.open("tmpMemPool.txt");
+  ifstream memPool;
+  memPool.open(MEMPOOL);
+
+  string line;
+
+  for (int i=0; i<TX_PER_BLOCK; i++) {
+    if (getline(memPool, line))
+      block->addTransaction(line);
+  }
+
+  while (getline(memPool, line))
+    newMemPool << line << endl;
+
+  memPool.close();
+  newMemPool.close();
+  remove(MEMPOOL);
+  rename("tmpMemPool.txt", MEMPOOL);
+
+}
+
 int main()
 {
-    //We define the target (for now it stays the same during all the execution)
-    //and the number of blocks we want to generate
-    string target = "1f0696f4";
-    int nbBlocks = 5;
+    int nbTransactions = 100;
+    int nbUsers = 10;
+    double nbBlocks = floor(nbTransactions / TX_PER_BLOCK);
 
-    //We create the blockchain
+    TransactionsGenerator* sim = new TransactionsGenerator(MEMPOOL, nbUsers, nbTransactions);
+    sim->generateTransactions();
+
     Blockchain blockchain;
     Block* block;
 
-    //We mine the blocks and insert them in the blockchain
     for (int i=0; i<nbBlocks; i++) {
-      block = new Block(blockchain.getHashPrevBlock(), target);
+
+      //Create a new block
+      block = new Block(blockchain.getHashPrevBlock(), blockchain.getTarget());
+
+      //Build the merkle tree
+      fillBlock(block);
+      block->buildMerkleTree();
+
+      //Mine and add the block to the block chain
       mine(block);
       blockchain.addBlock(block);
     }
 
-    //We display the blockchain
     blockchain.displayChain();
 
     return 0;
