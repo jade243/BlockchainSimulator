@@ -1,10 +1,6 @@
 #include "../headers/Block.h"
 
-//Constructors
-Block::Block() {
-  prev = NULL;
-}
-
+//Constructor
 Block::Block(string hashPrevBlock, string target) {
   prev = NULL;
   blockHeader = new BlockHeader(hashPrevBlock, target);
@@ -23,6 +19,15 @@ BlockHeader* Block::getBlockHeader() {
   return this->blockHeader;
 }
 
+//Manipulation related to transactions
+void Block::addTransaction(string transaction) {
+  this->transactions.push_back(transaction);
+}
+
+void Block::buildMerkleTree() {
+  this->getBlockHeader()->setHashMerkleRoot(MerkleTree::getMerkleRoot(this->transactions));
+}
+
 //Some printing functions
 void Block::computeId() {
   //We extract the 10 first bytes of the bloch header's hash
@@ -31,4 +36,11 @@ void Block::computeId() {
 
 void Block::printBlock() {
   cout << "Block id : " << this->id << "..." << endl;
+}
+
+void Block::printTransactions() {
+  cout << "There are " << this->transactions.size() << " transactions." << endl;
+  for (int i=0; i<this->transactions.size(); i++) {
+    cout << this->transactions.at(i) << endl;
+  }
 }
