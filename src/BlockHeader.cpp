@@ -4,47 +4,17 @@
 
 using namespace std;
 
-//First constructor to generate an almost random BlockHeader (to do some test)
-BlockHeader::BlockHeader() {
-  long unsigned int start = 0, end = (long unsigned int)(pow(2, 32)-1) ;
-
-  long unsigned int version_int = std::experimental::randint(start,  end);
-  version = int2Hex(version_int);
-
-  string prevBlock = "This was the previous block of the blockchain";
-  picosha2::hash256_hex_string(prevBlock, hashPrevBlock);
-
-  string merkleRoot = "This is the merkle root";
-  picosha2::hash256_hex_string(merkleRoot, hashMerkleRoot);
-
-  time_t time_int = std::time(0);
-  time = int2Hex((int)(time_int));
-
-  long unsigned int target_int = std::experimental::randint(start,  end);
-  target = int2Hex(target_int);
-
-  long unsigned int nonce_int = std::experimental::randint(start,  end);
-  nonce = int2Hex(nonce_int);
-}
-
-//Second constructor to generate a new block header
-//The version is random for now
 BlockHeader::BlockHeader(string hashPrevBlock, string target) {
-  long unsigned int start = 0, end = (long unsigned int)(pow(2, 32)-1) ;
-
-  long unsigned int version_int = std::experimental::randint(start,  end);
-  version = int2Hex(version_int);
-
   this->hashPrevBlock = hashPrevBlock;
 
-  string merkleRoot = "This is the merkle root";
-  picosha2::hash256_hex_string(merkleRoot, hashMerkleRoot);
+  string merkleRoot = "";
 
   time_t time_int = std::time(0);
   time = int2Hex((int)(time_int));
 
   this->target = target;
 
+  long unsigned int start = 0, end = (long unsigned int)(pow(2, 32)-1) ;
   long unsigned int nonce_int = std::experimental::randint(start,  end);
   nonce = int2Hex(nonce_int);
 }
@@ -57,20 +27,8 @@ string BlockHeader::int2Hex(int number) {
   return result;
 }
 
-//To print the size of each field
-void BlockHeader::printSizes() {
-  //We use strings to represent hex numbers, so the size depends on the length
-  //of each string
-  cout << "Size of version\t\t" << (version.length()*4) << " bits" << endl;
-  cout << "Size of hashPrevBlock\t" << (hashPrevBlock.length()*4) << " bits" << endl;
-  cout << "Size of hashMerkleRoot\t" << (hashPrevBlock.length()*4) << " bits" << endl;
-  cout << "Size of time\t\t" << (time.length()*4) << " bits" << endl;
-  cout << "Size of target\t\t" << (target.length()*4) << " bits" << endl;
-  cout << "Size of nonce\t\t" << (nonce.length()*4) << " bits" << endl;
-}
 
 //Getters and setters
-
 string BlockHeader::getNonce() {
   return this->nonce;
 }
@@ -91,6 +49,10 @@ void BlockHeader::setTarget(string target) {
   this->target = target;
 }
 
+void BlockHeader::setHashMerkleRoot(string merkleRoot) {
+  this->hashMerkleRoot = merkleRoot;
+}
+
 //Performs the hash operation on the block header
 //The operation used is SHA256(SHA256(blockheader))
 string BlockHeader::hashOperation() {
@@ -103,6 +65,13 @@ string BlockHeader::hashOperation() {
   picosha2::hash256_hex_string(hash1, hash2);
 
   return hash2;
+}
+
+//To create one string with all the fields so we can hash the block header
+string BlockHeader::toString() {
+  stringstream stream;
+  stream << version << hashPrevBlock << hashMerkleRoot << time << target << nonce;
+  return stream.str();
 }
 
 //Transforms the target in the same format than an output of the hash function
@@ -130,9 +99,26 @@ string BlockHeader::target2Hex() {
   return finalTarget;
 }
 
-//To create one string with all the fields so we can hash the block header
-string BlockHeader::toString() {
-  stringstream stream;
-  stream << version << hashPrevBlock << hashMerkleRoot << time << target << nonce;
-  return stream.str();
+//Some printing functions
+
+//To print the size of each field
+void BlockHeader::printSizes() {
+  //We use strings to represent hex numbers, so the size depends on the length
+  //of each string
+  cout << "Size of version\t\t" << (version.length()*4) << " bits" << endl;
+  cout << "Size of hashPrevBlock\t" << (hashPrevBlock.length()*4) << " bits" << endl;
+  cout << "Size of hashMerkleRoot\t" << (hashPrevBlock.length()*4) << " bits" << endl;
+  cout << "Size of time\t\t" << (time.length()*4) << " bits" << endl;
+  cout << "Size of target\t\t" << (target.length()*4) << " bits" << endl;
+  cout << "Size of nonce\t\t" << (nonce.length()*4) << " bits" << endl;
+}
+
+//To print all fields in the block header
+void BlockHeader::printBlockHeader() {
+  cout << "Version\t\t" << version << endl;
+  cout << "HashPrevBlock\t" << hashPrevBlock << endl;
+  cout << "HashMerkleRoot\t" << hashMerkleRoot << endl;
+  cout << "Time\t\t" << time << endl;
+  cout << "Target\t\t" << target << endl;
+  cout << "Nonce\t\t" << nonce << endl;
 }

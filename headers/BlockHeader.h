@@ -10,19 +10,17 @@ class BlockHeader {
   private:
 
     //Attributes
-
-    string version;           //Version of the block
-    string hashPrevBlock;     //hash of the previous block
-    string hashMerkleRoot;    //merkle root
-    string time;              //time
-    string target;            //expected target for the hash
-    string nonce;             //random number
+    string version = "20000000";  //Version of the block (from Bloc #573513 of Bitcoin blockchain)
+    string hashPrevBlock;         //hash of the previous block
+    string hashMerkleRoot;        //merkle root
+    string time;                  //time
+    string target;                //expected target for the hash
+    string nonce;                 //random number
 
     //Methods
     string int2Hex(int number);
 
   public:
-    BlockHeader();
     BlockHeader(string hashPrevBlock, string target);
 
     //Some getters and setters
@@ -31,6 +29,7 @@ class BlockHeader {
     string getTarget();
     string getHashPrevBlock();
     void setTarget(string target);
+    void setHashMerkleRoot(string merkleRoot);
 
     string hashOperation();   //To perform the hash operation of the block header
     string toString();        //To create one string with all the fields
@@ -39,6 +38,7 @@ class BlockHeader {
 
     //Some printing functions
     void printSizes();
+    void printBlockHeader();
 
 
 };
