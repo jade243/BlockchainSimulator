@@ -14,10 +14,10 @@ void TransactionsGenerator::generateTransactions() {
 
   //To compute amount for each user and initial amount needed
   int users[this->nbUsers] = {0};
-  int initialAmount[this->nbUsers] = {0};
+  int initialAmount[this->nbUsers] = {1};
 
   //We generate transactions
-  for (int i=0; i<this->nbTransactions; i++) {
+  for (int i=0; i<this->nbTransactions-this->nbUsers; i++) {
     //We choose two different users
     int payer = chooseRandomUser(-1);
     int payee = chooseRandomUser(payer);
@@ -42,8 +42,7 @@ void TransactionsGenerator::generateTransactions() {
 
   //We start by saving the initial amounts
   for (int i=0; i<this->nbUsers; i++) {
-    if (initialAmount[i] != 0)
-      file << "User " << i+1 << " starts with " << initialAmount[i] << " bitcoin(s).\n";
+    file << "User " << i+1 << " starts with " << initialAmount[i] << " bitcoin(s).\n";
   }
 
   //and then the transactions
