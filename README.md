@@ -6,12 +6,11 @@ C++ code to simulate a blockchain.
 
 This work is focusing on the mining process, here an example of 5-blocks mining :
 
-![Alt Text](https://github.com/jade243/BlockchainSimulator/tree/master/figures/MiningExample.png)
-
+![MiningExample](../master/figures/MiningExample.png)
 
 Transactions are represented in a simplified way, they are generated automatically and saved in a file :
 
-![Alt Text](https://github.com/jade243/BlockchainSimulator/tree/master/figures/TransactionsList.png)
+![TransactionsList](../master/figures/TransactionsList.png)
 
 ## Running the program locally
 
