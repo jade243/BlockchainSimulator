@@ -1,20 +1,13 @@
 #include "../headers/TransactionsGenerator.h"
 
 //Constructor to set the main parameters
-TransactionsGenerator::TransactionsGenerator(string fileName, int nbUsers, int nbTransactions) {
-  this->fileName = fileName;
-  this->nbUsers = nbUsers;
-  this->nbTransactions = nbTransactions;
-}
-
-//Constructor to set the main parameters
 TransactionsGenerator::TransactionsGenerator(int nbUsers, int nbTransactions) {
   this->nbUsers = nbUsers;
   this->nbTransactions = nbTransactions;
 }
 
 //Generate random transactions and save them to a file
-void TransactionsGenerator::generateTransactions() {
+void TransactionsGenerator::generateTransactions(string fileName) {
 
   stringstream stream;
 
@@ -44,7 +37,7 @@ void TransactionsGenerator::generateTransactions() {
 
   //We save the transactions to the file
   ofstream file;
-  file.open (this->fileName);
+  file.open (fileName);
 
   //We start by saving the initial amounts
   for (int i=0; i<this->nbUsers; i++) {
@@ -113,6 +106,6 @@ int TransactionsGenerator::chooseRandomUser(int previousChoice) {
 
 void TransactionsGenerator::printTransactions(vector<string> transactions) {
   for (auto&& transaction: transactions) {
-    cout << transaction << endl;
+    cout << transaction;
   }
 }
