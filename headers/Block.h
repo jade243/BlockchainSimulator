@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../src/MerkleTree.cpp"
+#include "../src/BlockHeader.cpp"
 
 using namespace std;
 
