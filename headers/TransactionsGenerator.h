@@ -1,5 +1,8 @@
 #include <iostream>
 #include <experimental/random>
+#include <sstream>
+#include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -17,6 +20,9 @@ class TransactionsGenerator {
 
   public:
     TransactionsGenerator(string fileName, int nbUsers, int nbTransactions);
+    TransactionsGenerator(int nbUsers, int nbTransactions);
     void generateTransactions();
+    vector<string> generateVectorTransactions();
+    void printTransactions(vector<string> transactions);
 
 };
