@@ -35,6 +35,7 @@ int main(int argc, char **argv) {
   //Data
   vector<string> transactions;
   Miner* miner;
+  Block* block;
 
   //===== Proc 0 will prepare the data for all nodes
   if (myRank == 0) {
@@ -44,19 +45,38 @@ int main(int argc, char **argv) {
     cout << "nbBlocks : " << nbBlocks << " with " << nbTransactionsByBlock << " transactions each" << endl;
     cout << "nbProc : " << nProc << endl;
 
-    //Generate the random transactions and transmit them to others
+    //Generate the random transactions and save them in a file for others
     TransactionsGenerator* sim = new TransactionsGenerator(nbUsers, nbTransactions);
     sim->generateTransactions(MEMPOOL_FILE);
-    //sim->printTransactions(transactions);
-    //MPI_Bcast(transactions.data(), transactions.size(), MPI_CHAR, 0, MPI_COMM_WORLD);
-
-    //sim->getTransactionsFromFile(MEMPOOL_FILE);
   }
 
+  //All nodes get the transactions in the file
   MPI_Barrier(MPI_COMM_WORLD);
   miner = new Miner("", myRank, transactions);
   miner->getTransactionsFromFile(MEMPOOL_FILE);
-  miner->printInfos();
+
+  MPI_Barrier(MPI_COMM_WORLD);
+
+  if (myRank == 0) {
+    remove(MEMPOOL_FILE);
+    cout << "Initialization done (all procs have received the data)" << endl;
+  }
+
+  MPI_Barrier(MPI_COMM_WORLD);
+
+  //===== Now, all nodes are ready and are in the same state =====
+
+  while (!miner->isEmpty()) {
+    block = miner->fillBlock(block, nbTransactionsByBlock);
+    block->buildMerkleTree();
+
+    miner->mine(block);
+    //block->setId(miner->getLastID());
+    miner->addBlock(block);
+    cout << "Block " << block->getId() << " mined by " << myRank << endl;
+  }
+
+
 
   MPI_Finalize();
 
