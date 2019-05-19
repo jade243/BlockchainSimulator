@@ -21,6 +21,7 @@ class TransactionsGenerator {
     TransactionsGenerator(int nbUsers, int nbTransactions);
     void generateTransactions(string fileName);
     vector<string> generateVectorTransactions();
+
     void printTransactions(vector<string> transactions);
 
 };
