@@ -28,13 +28,14 @@ Transactions are represented in a simplified way, they are generated automatical
 
 ## Running the program locally
 
+To compile the code, you can the makefile and the command : `make`. It will compile for both parallel and sequential codes.
+
 ### Sequential code
 
-To run and then execute the program, you can use the following commands (for Ubuntu):
+To execute the program, you can use the following command (for Ubuntu):
 
 ```
-g++ -o blockchainSimulator ./src/main.cpp
-./blockchainSimulator
+./blockchainSequential
 ```
 
 ### Parallelized code
@@ -45,11 +46,11 @@ First, you need a MPI compiler
 * On windows, have a look to Microsoft MPI
 * Mac OS: Open-mpi or Mpich
 
-Then, there is a Makefile so you just have to execute the following commands :
+Then, you need to compile the code and run the code with the following commands :
 
 ```
 make
-mpirun -np 10 ./blockchain 100 10
+mpirun -np 10 ./blockchainParallel 100 10
 ```
 
-(MPI run command : `mpirun -np <nbProcs> ./blockchain <nbTransactions> <nbBlocks>`)
+(MPI run command : `mpirun -np <nbProcs> ./blockchainParallel <nbTransactions> <nbBlocks>`)
