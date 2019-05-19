@@ -1,5 +1,5 @@
 transactionsList.txt
 transaction.txt
 blockchainSimulator.exe
-blockchainSimulator
-blockchain
+blockchainSequential
+blockchainParallel
