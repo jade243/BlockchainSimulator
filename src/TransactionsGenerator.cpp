@@ -46,7 +46,6 @@ void TransactionsGenerator::generateTransactions(string fileName) {
 
   //and then the transactions
   file << stream.rdbuf();
-  file << "\n";
 
   file.close();
 }
