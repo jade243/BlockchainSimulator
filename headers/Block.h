@@ -8,11 +8,12 @@ using namespace std;
 class Block {
 
   private:
-    Block* prev;                //pointer on the previous block
-    BlockHeader* blockHeader;   //block header
-    string id;                  //it's the 10 first bytes of the hash (to optimize visualization)
+    Block* prev;                      //pointer on the previous block
+    BlockHeader* blockHeader;         //block header
+    int id = 0;
+    string shortRep;                  //it's the 10 first bytes of the hash (to optimize visualization)
 
-    vector<string> transactions;//List of transactions
+    vector<string> transactions;      //List of transactions
 
   public:
     //Constructor
@@ -22,6 +23,9 @@ class Block {
     Block* getPrev();
     void setPrev(Block* prev);
     BlockHeader* getBlockHeader();
+    string getShortRep();
+    int getId();
+    void setId(int id);
 
     //Manipulation related to transactions
     void addTransaction(string transaction);

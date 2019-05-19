@@ -19,6 +19,18 @@ BlockHeader* Block::getBlockHeader() {
   return this->blockHeader;
 }
 
+string Block::getShortRep() {
+  return this->shortRep;
+}
+
+int Block::getId() {
+  return this->id;
+}
+
+void Block::setId(int id) {
+  this->id = id;
+}
+
 //Manipulation related to transactions
 void Block::addTransaction(string transaction) {
   this->transactions.push_back(transaction);
@@ -31,11 +43,11 @@ void Block::buildMerkleTree() {
 //Some printing functions
 void Block::computeId() {
   //We extract the 10 first bytes of the bloch header's hash
-  id = blockHeader->hashOperation().substr(0, 10);
+  this->shortRep = blockHeader->hashOperation().substr(0, 10);
 }
 
 void Block::printBlock() {
-  cout << "Block id : " << this->id << "..." << endl;
+  cout << "Block id : " << this->shortRep << "..." << endl;
 }
 
 void Block::printTransactions() {
