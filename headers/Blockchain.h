@@ -9,6 +9,7 @@ class Blockchain {
   private:
     Block* head; //The head of the blockchain, i.e the last mined block
     string target = "1f0696f4"; //Target for any new block in the blockchain
+    int blockID = -1;
 
   public:
     Blockchain();

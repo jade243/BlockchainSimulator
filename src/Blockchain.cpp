@@ -6,6 +6,8 @@ Blockchain::Blockchain() {
 
 //To add a block in the blockchain
 void Blockchain::addBlock(Block* block) {
+  this->blockID += 1;
+  block->setId(this->blockID+1);
   if (head == NULL) {       //If it's the first block...
     head = block;
   }
