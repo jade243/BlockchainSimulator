@@ -1,7 +1,5 @@
 #include <iostream>
 #include "../headers/picosha2.h"
-#include "BlockHeader.cpp"
-#include "Block.cpp"
 #include "Blockchain.cpp"
 #include "TransactionsGenerator.cpp"
 #include <experimental/random>
@@ -60,8 +58,8 @@ int main()
     int nbUsers = 10;
     double nbBlocks = floor(nbTransactions / TX_PER_BLOCK);
 
-    TransactionsGenerator* sim = new TransactionsGenerator(MEMPOOL, nbUsers, nbTransactions);
-    sim->generateTransactions();
+    TransactionsGenerator* sim = new TransactionsGenerator(nbUsers, nbTransactions);
+    sim->generateTransactions(MEMPOOL);
 
     Blockchain blockchain;
     Block* block;
