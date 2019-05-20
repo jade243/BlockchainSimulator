@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
     //Write general informations in a file
     cout << "Informations about this execution" << endl;
     cout << "nbTransactions : " << nbTransactions << endl;
-    cout << "nbBlocks : " << nbBlocks << " with " << nbTransactionsByBlock << " transactions each" << endl;
+    cout << "nbBlocks : " << nbBlocks << " with no more than " << nbTransactionsByBlock << " transactions each" << endl;
     cout << "nbProc : " << nProc << endl;
 
     //Generate the random transactions and save them in a file for others
