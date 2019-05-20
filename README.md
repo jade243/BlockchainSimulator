@@ -51,7 +51,7 @@ First, you need a MPI compiler
 * On windows, have a look to Microsoft MPI
 * Mac OS: Open-mpi or Mpich
 
-Then, you need to compile the code and run the code with the following commands :
+Then, you need to compile and run the code with the following commands :
 
 ```
 make
