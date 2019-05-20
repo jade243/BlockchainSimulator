@@ -4,6 +4,11 @@ C++ code to simulate a blockchain, focusing on the mining process.
 
 If you need indications to run the code locally, please refer to the section at the end of this file.
 
+TODO :
+
+* Implement writing the logs for the miners
+* Start version 2
+
 ## Version 1
 
 In this version, we are using MPI to parallelize the code. When the program starts, the processus 0 initiliaze the data (generates random transactions and save them in a file). Then, all nodes try to mine the transactions by blocks on their own and they write a log file with all interesting informations about the execution.
