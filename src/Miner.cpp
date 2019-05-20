@@ -31,9 +31,10 @@ Block* Miner::fillBlock(Block* block, int nbTransactionsByBlock) {
   string line;
 
   for (int i=0; i<nbTransactionsByBlock; i++) {
-    if (this->memPool.size() >= 1)
+    if (this->memPool.size() >= 1) {
       block->addTransaction(this->memPool.at(0));
       this->memPool.erase(this->memPool.begin());
+    }
   }
   return block;
 }
