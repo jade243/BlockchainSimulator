@@ -17,6 +17,8 @@ In this version, all nodes have their own representation of the blockchain so in
 
 ![MiningParallelizedExample](../master/figures/MiningParallelizedExample.png)
 
+![Log](../master/figures/logs.png)
+
 ## Version 0
 
 This is a first draft of the project : a sequential code where we modelize mining a few blocks with random transactions.
@@ -59,3 +61,9 @@ mpirun -np 10 ./blockchainParallel 100 10
 ```
 
 (MPI run command : `mpirun -np <nbProcs> ./blockchainParallel <nbTransactions> <nbBlocks>`)
+
+## Running the program on baobab cluster
+
+To truly parallelize the code, the computations are performed at University of Geneva on the Baobab cluster. To run the code, we use the script `baobabScript.sh` in the following command : `sbatch baobabScript`.
+
+This will use any available nodes on the cluster. However, if we want to use similar nodes (with the same performance), we can use : `sbatch --constraint=V4 baobabScript.sh`
