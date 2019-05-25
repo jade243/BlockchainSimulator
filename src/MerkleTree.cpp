@@ -6,13 +6,13 @@ string MerkleTree::getMerkleRoot(vector<string> transactions) {
   vector<string> tmpHashes;
 
   //First, we push the hashes of the transactions
-  for (int i=0; i<transactions.size(); i++) {
+  for (unsigned int i=0; i<transactions.size(); i++) {
     hashes.push_back(hashOperation(transactions.at(i)));
   }
 
   //We compute the tree until we get one hash (the merkle root)
   while (hashes.size() != 1) {
-    int i = 0;
+    unsigned int i = 0;
     while (i+1 < hashes.size()) {
       tmpHashes.push_back(hashOperation(hashes.at(i) + hashes.at(i+1)));
       i = i+2;

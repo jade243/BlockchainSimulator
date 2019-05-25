@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 
   //===== Initialising MPI ======
   int myRank, nProc; //Variables to know the rank of the current process and the number of processes
-  MPI_Status status;
+  //MPI_Status status;
 
   MPI_Init(&argc, &argv);
   MPI_Comm_rank(MPI_COMM_WORLD, &myRank);

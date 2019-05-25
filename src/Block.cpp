@@ -52,7 +52,7 @@ void Block::printBlock() {
 
 void Block::printTransactions() {
   cout << "There are " << this->transactions.size() << " transactions." << endl;
-  for (int i=0; i<this->transactions.size(); i++) {
+  for (unsigned int i=0; i<this->transactions.size(); i++) {
     cout << this->transactions.at(i) << endl;
   }
 }
