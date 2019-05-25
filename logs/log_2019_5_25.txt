@@ -1,0 +1,3 @@
+[nbTransactions] 10
+[nbBlocks] 2
+[nbProc] 2
