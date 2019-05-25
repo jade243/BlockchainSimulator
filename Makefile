@@ -1,7 +1,7 @@
 EXEC = blockchainParallel blockchainSequential
 CC = mpiCC
 CPP = g++
-OPT = -c -Wall
+OPT = -Wall
 
 all: $(EXEC)
 
