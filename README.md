@@ -6,7 +6,6 @@ If you need indications to run the code locally, please refer to the section at 
 
 TODO :
 
-* Implement writing the logs for the miners
 * Start version 2
 
 ## Version 1
@@ -18,6 +17,10 @@ In this version, all nodes have their own representation of the blockchain so in
 ![MiningParallelizedExample](../master/figures/MiningParallelizedExample.png)
 
 ![Log](../master/figures/logs.png)
+
+In the folder scripts, there are scripts, written for Matlab or Octave, to visualize and analyze the data. For example time_graph.m :
+
+![TimeGraph](../master/figures/time_graph.png)
 
 ## Version 0
 
