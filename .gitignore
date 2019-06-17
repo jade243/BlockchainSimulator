@@ -3,3 +3,5 @@ transaction.txt
 blockchainSimulator.exe
 blockchainSequential
 blockchainParallel
+
+*.txt
