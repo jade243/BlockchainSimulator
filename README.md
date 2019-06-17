@@ -30,8 +30,6 @@ If you need indications to run the code locally, please refer to the section at 
 	- [x] Implement a function to mine a block with SHA-256
 	- [x] Implement the algorithm so the miner mines severals blocks and add them in its blockchain
 
-* Start version 2
-
 ## Version 1
 
 In this version, we are using MPI to parallelize the code. When the program starts, the processus 0 initiliaze the data (generates random transactions and save them in a file). Then, all nodes try to mine the transactions by blocks on their own and they write a log file with all interesting informations about the execution.
