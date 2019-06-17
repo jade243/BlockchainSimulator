@@ -4,10 +4,9 @@
 
 Miner::Miner() {}
 
-Miner::Miner(string name, int id, vector<string> memPool) {
+Miner::Miner(string name, int id) {
   this->name = name;
   this->id = id;
-  this->memPool = memPool;
 }
 
 //Manipulation methods
@@ -25,10 +24,14 @@ void Miner::getTransactionsFromFile(string fileName) {
   }
 }
 
+void Miner::setTransactions(vector<string> transactions) {
+  //this->memPool.assign(transactions.begin(), transactions.end());
+  this->memPool = transactions;
+}
+
 Block* Miner::fillBlock(Block* block, int nbTransactionsByBlock) {
 
   block = new Block(this->blockchain->getHashPrevBlock(), this->blockchain->getTarget());
-  string line;
 
   for (int i=0; i<nbTransactionsByBlock; i++) {
     if (this->memPool.size() >= 1) {
@@ -73,4 +76,33 @@ void Miner::printInfos() {
     for(size_t i=0; i<this->memPool.size(); ++i)
       cout << this->memPool[i] << endl;
   }
+}
+
+//Methods for serialization / deserialization to send objects
+string Miner::serializeTransactions(vector<string> transactions) {
+  stringstream stream;
+  for(size_t i=0; i<transactions.size()-1; ++i)
+      stream << transactions[i] << endl;
+  stream << transactions[transactions.size()-1];
+  return stream.str();
+}
+
+
+vector<string> Miner::deserializeTransactions(string s) {
+  stringstream stream;
+  stream.str(s);
+  vector<string> transactions;
+
+  while (!stream.eof()) {
+    transactions.push_back(getString(stream));
+  }
+  return transactions;
+}
+
+string Miner::getString(stringstream& stream) {
+  int size = 1024;
+  char line[size];
+  stream.getline(line, size);
+  string line_tmp = line;
+  return line_tmp;
 }

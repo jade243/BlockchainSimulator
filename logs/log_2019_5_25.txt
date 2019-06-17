@@ -1,3 +1,0 @@
-[nbTransactions] 200
-[nbBlocks] 20
-[nbProc] 20

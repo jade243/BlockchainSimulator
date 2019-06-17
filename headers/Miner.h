@@ -16,15 +16,21 @@ class Miner {
     vector<string> memPool;
     Blockchain* blockchain = new Blockchain();
 
+    string getString(stringstream& stream);
+
 
   public:
     Miner();
-    Miner(string name, int id, vector<string> memPool);
+    Miner(string name, int id);
     void getTransactionsFromFile(string fileName);
+    void setTransactions(vector<string> transactions);
     Block* fillBlock(Block* block, int nbTransactionsByBlock);
     void mine(Block* block);
     void addBlock(Block* block);
     bool isEmpty();
+
+    string serializeTransactions(vector<string> transactions);
+    vector<string> deserializeTransactions(string s);
 
     int getLastID();
 

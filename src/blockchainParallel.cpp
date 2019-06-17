@@ -6,8 +6,6 @@
 #include "TransactionsGenerator.cpp"
 #include "Miner.cpp"
 
-#define MEMPOOL_FILE "transaction.txt"
-
 using namespace std;
 typedef std::chrono::system_clock Clock;
 
@@ -45,8 +43,12 @@ int main(int argc, char **argv) {
 
   //Data
   vector<string> transactions;
-  Miner* miner;
+  Miner* miner = new Miner("", myRank);
   Block* block;
+
+  //To communicate the transactions
+  string stringComm;
+  int tag = 0;
 
   //To measure the time
   chrono::time_point<std::chrono::system_clock> start, end;
@@ -57,25 +59,38 @@ int main(int argc, char **argv) {
   if (myRank == 0) {
     //Generate the random transactions and save them in a file for others
     TransactionsGenerator* sim = new TransactionsGenerator(nbUsers, nbTransactions);
-    sim->generateTransactions(MEMPOOL_FILE);
+    transactions = sim->generateVectorTransactions();
+
+    //We send the vector to the others procs
+    stringComm = miner->serializeTransactions(transactions);
+    for (int i=1; i<nProc; i++) {
+      MPI_Send(&stringComm[0], stringComm.size()+1, MPI_CHAR, i, tag, MPI_COMM_WORLD);
+    }
+  } else {
+    //We get the transactions sent by proc 0
+    MPI_Status status;
+    MPI_Probe(0, tag, MPI_COMM_WORLD, &status);
+
+    int count;
+    MPI_Get_count(&status, MPI_CHAR, &count);
+
+    char buf [count];
+    MPI_Recv(&buf, count, MPI_CHAR, 0, tag, MPI_COMM_WORLD, &status);
+    string s = buf;
+
+    transactions = miner->deserializeTransactions(s);
   }
 
-  //All nodes get the transactions in the file
-  MPI_Barrier(MPI_COMM_WORLD);
-  miner = new Miner("", myRank, transactions);
-  miner->getTransactionsFromFile(MEMPOOL_FILE);
+  miner->setTransactions(transactions);
+
 
   MPI_Barrier(MPI_COMM_WORLD);
-
   if (myRank == 0) {
-    remove(MEMPOOL_FILE);
-    cout << "Initialization done (all procs have received the data)" << endl;
+    cout << "Initialization stage done ! " << endl;
+    cout << "Mining stage in process..." << endl;
   }
-
   MPI_Barrier(MPI_COMM_WORLD);
-
   //===== Now, all nodes are ready and are in the same state =====
-
   while (!miner->isEmpty()) {
 
     start = Clock::now();
@@ -84,6 +99,7 @@ int main(int argc, char **argv) {
 
     miner->mine(block);
     miner->addBlock(block);
+    //cout << "One block mined by " << myRank << " !" << endl;
     end = Clock::now();
 
     stream << "[" << getStrTime(end) << "]" << " ";
@@ -93,6 +109,11 @@ int main(int argc, char **argv) {
 
 
   //===== There, all nodes have finished =====
+  MPI_Barrier(MPI_COMM_WORLD);
+  if (myRank == 0) {
+    cout << "Mining stage done !" << endl;
+    cout << "Now writing logs..." << endl;
+  }
   MPI_Barrier(MPI_COMM_WORLD);
 
   auto now = Clock::now();

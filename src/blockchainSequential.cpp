@@ -6,7 +6,6 @@
 
 #define MIN 0
 #define MAX (int)(pow(2, 32)-1)
-#define MEMPOOL "transactionsList.txt"
 #define TX_PER_BLOCK 10
 
 using namespace std;
@@ -28,28 +27,14 @@ void mine(Block* block) {
   }
 }
 
-void fillBlock(Block* block) {
-
-  ofstream newMemPool;
-  newMemPool.open("tmpMemPool.txt");
-  ifstream memPool;
-  memPool.open(MEMPOOL);
-
-  string line;
+void fillBlock(Block* block, vector<string> transactions) {
 
   for (int i=0; i<TX_PER_BLOCK; i++) {
-    if (getline(memPool, line))
-      block->addTransaction(line);
+    if (transactions.size() >= 1) {
+      block->addTransaction(transactions.at(0));
+      transactions.erase(transactions.begin());
+    }
   }
-
-  while (getline(memPool, line))
-    newMemPool << line << endl;
-
-  memPool.close();
-  newMemPool.close();
-  remove(MEMPOOL);
-  rename("tmpMemPool.txt", MEMPOOL);
-
 }
 
 int main()
@@ -59,7 +44,7 @@ int main()
     double nbBlocks = floor(nbTransactions / TX_PER_BLOCK);
 
     TransactionsGenerator* sim = new TransactionsGenerator(nbUsers, nbTransactions);
-    sim->generateTransactions(MEMPOOL);
+    vector<string> transactions = sim->generateVectorTransactions();
 
     Blockchain blockchain;
     Block* block;
@@ -70,7 +55,7 @@ int main()
       block = new Block(blockchain.getHashPrevBlock(), blockchain.getTarget());
 
       //Build the merkle tree
-      fillBlock(block);
+      fillBlock(block, transactions);
       block->buildMerkleTree();
 
       //Mine and add the block to the block chain
