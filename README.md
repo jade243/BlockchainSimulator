@@ -1,11 +1,15 @@
 
 # BlockchainSimulator
 
-C++ code to simulate a blockchain, focusing on the mining process.
-This project is divided in three parts :
+C++ code to simulate a blockchain, focusing on the mining process and some Matlab/Octave scripts to analyze results produced by the blockchain's simulation and some probabilities for attacks against blockchains.
+
+This project is divided in several parts :
 - A sequential code, in C++, to simulate mining a list of transactions
 - A paralled code, in C++ using MPI library, to simulate several miners working together to mine a list of transactions
 - A Matlab/Octave code to analyze the logs produced by the miners
+- A Matlab/Octave code to analyze probabilities of success for selfish mining
+
+The larger part (C++ code) is located is `src` folder and the Matlab/Octave code is located in `scripts` folder.
 
 Some experiments were performed at University of Geneva on the Baobab cluster.
 
@@ -13,6 +17,8 @@ If you need indications to run the code locally, please refer to the section at 
 
 ### Tasks list:
 
+- [ ] Selfish mining
+  - [ ] Simulate the finite state machine
 - [ ] Version 2
 	- [x] Broadcast transactions with MPI, without using files
 	- [ ] Serialize blocks to send them with MPI
