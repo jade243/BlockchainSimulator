@@ -14,6 +14,7 @@ class Block {
     string shortRep;                  //it's the 10 first bytes of the hash (to optimize visualization)
 
     vector<string> transactions;      //List of transactions
+    string getString(stringstream& stream);
 
   public:
     //Constructor
@@ -26,6 +27,10 @@ class Block {
     string getShortRep();
     int getId();
     void setId(int id);
+
+    //Methods to send and receive blocks
+    string serialize();
+    void deserialize(string s);
 
     //Manipulation related to transactions
     void addTransaction(string transaction);

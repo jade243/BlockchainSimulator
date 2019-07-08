@@ -56,3 +56,51 @@ void Block::printTransactions() {
     cout << this->transactions.at(i) << endl;
   }
 }
+
+//Methods for serialization
+
+string Block::serialize() {
+  stringstream stream;
+  stream << blockHeader->getVersion() << endl;
+  stream << blockHeader->getHashPrevBlock() << endl;
+  stream << blockHeader->getHashMerkleRoot() << endl;
+  stream << blockHeader->getTime() << endl;
+  stream << blockHeader->getTarget() << endl;
+  stream << blockHeader->getNonce() << endl;
+  stream << id << endl;
+  for(size_t i=0; i<this->transactions.size()-1; ++i)
+      stream << this->transactions[i] << endl;
+  stream << this->transactions[this->transactions.size()-1];
+  return stream.str();
+}
+
+string Block::getString(stringstream& stream) {
+  int size = 1024;
+  char line[size];
+  stream.getline(line, size);
+  string line_tmp = line;
+  return line_tmp;
+}
+
+void Block::deserialize(string s) {
+
+  stringstream stream;
+  stream.str(s);
+
+  string version = getString(stream);
+  string hashPrevBlock = getString(stream);
+  string hashMerkleRoot = getString(stream);
+  string time = getString(stream);
+  string target = getString(stream);
+  string nonce = getString(stream);
+  BlockHeader* blockHeader = new BlockHeader(version, hashPrevBlock, hashMerkleRoot, time, target, nonce);
+  this->blockHeader = blockHeader;
+
+  this->id = stoi(getString(stream));
+
+  while (!stream.eof()) {
+    this->transactions.push_back(getString(stream));
+  }
+
+  this->computeId();
+}
