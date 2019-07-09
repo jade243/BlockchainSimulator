@@ -22,6 +22,7 @@ class BlockHeader {
 
   public:
     BlockHeader(string hashPrevBlock, string target);
+    BlockHeader(string version, string hashPrevBlock, string hashMerkleRoot, string time, string target, string nonce);
 
     //Some getters and setters
     string getNonce();
@@ -30,6 +31,9 @@ class BlockHeader {
     string getHashPrevBlock();
     void setTarget(string target);
     void setHashMerkleRoot(string merkleRoot);
+    string getVersion();
+    string getHashMerkleRoot();
+    string getTime();
 
     string hashOperation();   //To perform the hash operation of the block header
     string toString();        //To create one string with all the fields

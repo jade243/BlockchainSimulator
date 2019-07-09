@@ -19,6 +19,15 @@ BlockHeader::BlockHeader(string hashPrevBlock, string target) {
   nonce = int2Hex(nonce_int);
 }
 
+BlockHeader::BlockHeader(string version, string hashPrevBlock, string hashMerkleRoot, string time, string target, string nonce) {
+  this->version = version;
+  this->hashPrevBlock = hashPrevBlock;
+  this->hashMerkleRoot = hashMerkleRoot;
+  this->time = time;
+  this->target = target;
+  this->nonce = nonce;
+}
+
 //Function to convert a decimal number in hexadecimal
 string BlockHeader::int2Hex(int number) {
   stringstream stream;
@@ -51,6 +60,18 @@ void BlockHeader::setTarget(string target) {
 
 void BlockHeader::setHashMerkleRoot(string merkleRoot) {
   this->hashMerkleRoot = merkleRoot;
+}
+
+string BlockHeader::getVersion() {
+  return this->version;
+}
+
+string BlockHeader::getHashMerkleRoot() {
+  return this->hashMerkleRoot;
+}
+
+string BlockHeader::getTime() {
+  return this->time;
 }
 
 //Performs the hash operation on the block header
