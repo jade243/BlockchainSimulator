@@ -25,7 +25,7 @@ class Miner {
     void getTransactionsFromFile(string fileName);
     void setTransactions(vector<string> transactions);
     Block* fillBlock(Block* block, int nbTransactionsByBlock);
-    void mine(Block* block);
+    bool mine(Block* block);
     void addBlock(Block* block);
     bool isEmpty();
 

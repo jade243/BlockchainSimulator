@@ -19,6 +19,7 @@ class Block {
   public:
     //Constructor
     Block(string hashPrevBlock, string target);
+    Block();
 
     //Some getters and setters
     Block* getPrev();

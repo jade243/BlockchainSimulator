@@ -43,19 +43,19 @@ Block* Miner::fillBlock(Block* block, int nbTransactionsByBlock) {
 }
 
 //To mine a block
-void Miner::mine(Block* block) {
+bool Miner::mine(Block* block) {
 
   string target = block->getBlockHeader()->target2Hex();
-  while (true) {
-    //We get a random nonce each time to try to be lower than the target
-    block->getBlockHeader()->setNonce(std::experimental::randint(MIN,  MAX));
-    string hash = block->getBlockHeader()->hashOperation();
-    //If we are lower, we're done
-    if (hash <= target) {
-      block->computeId();
-      break;
-    }
+
+  //We get a random nonce each time to try to be lower than the target
+  block->getBlockHeader()->setNonce(std::experimental::randint(MIN,  MAX));
+  string hash = block->getBlockHeader()->hashOperation();
+  //If we are lower, we're done
+  if (hash <= target) {
+    block->computeId();
+    return true;
   }
+  return false;
 }
 
 void Miner::addBlock(Block* block) {

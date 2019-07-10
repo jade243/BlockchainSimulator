@@ -40,6 +40,7 @@ int main(int argc, char **argv) {
   MPI_Init(&argc, &argv);
   MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
   MPI_Comm_size(MPI_COMM_WORLD, &nProc);
+  MPI_Request request;
 
   //Data
   vector<string> transactions;
@@ -51,7 +52,8 @@ int main(int argc, char **argv) {
   int tag = 0;
 
   //To measure the time
-  chrono::time_point<std::chrono::system_clock> start, end;
+  chrono::time_point<std::chrono::system_clock> start, time;
+  start = Clock::now(); //We start a chronometer
   //To write infos in the file
   stringstream stream;
 
@@ -88,23 +90,76 @@ int main(int argc, char **argv) {
   if (myRank == 0) {
     cout << "Initialization stage done ! " << endl;
     cout << "Mining stage in process..." << endl;
+    time = Clock::now();
+    stream << "[" << getStrTime(time) << "]" << " ";
+    stream << "Initialization done in ";
+    stream << chrono::duration_cast<chrono::milliseconds> (time-start).count() << " milliseconds." << endl;
   }
+
+
   MPI_Barrier(MPI_COMM_WORLD);
   //===== Now, all nodes are ready and are in the same state =====
+  bool finishBlock = false;
+  bool isMining = false;
   while (!miner->isEmpty()) {
 
-    start = Clock::now();
+    //The miner construct a block
     block = miner->fillBlock(block, nbTransactionsByBlock);
     block->buildMerkleTree();
 
-    miner->mine(block);
-    miner->addBlock(block);
-    //cout << "One block mined by " << myRank << " !" << endl;
-    end = Clock::now();
+    finishBlock = false;
+    isMining = false;
 
-    stream << "[" << getStrTime(end) << "]" << " ";
-    stream << "Block " << block->getId() << " mined in ";
-    stream << chrono::duration_cast<chrono::milliseconds> (end-start).count() << " milliseconds." << endl;
+    while (!finishBlock) {
+
+      if (myRank == 0) {
+
+        while(!isMining) {
+          isMining = miner->mine(block);
+        }
+        cout << "0 is mining, and isMining equals to " << isMining << endl;
+        finishBlock = true;
+      }
+
+      if (isMining) { //If the miner has found a new block
+        //He broadcast his block to all the network
+        string s = block->serialize();
+        cout << "I'm proc " << myRank << " and I've sent a block" << endl;
+        for (int i=0; i<nProc; i++) {
+          if (i != myRank) {
+            MPI_Isend(&s[0], s.size()+1, MPI_CHAR, i, tag, MPI_COMM_WORLD, &request);
+          }
+        }
+      } else {
+        //We check if we received a message
+        MPI_Status status;
+        int flag;
+        MPI_Iprobe(0, tag, MPI_COMM_WORLD, &flag, &status);
+
+        if (flag) {
+          int count;
+          MPI_Get_count(&status, MPI_CHAR, &count);
+
+          char buf [count];
+          MPI_Irecv(&buf, count, MPI_CHAR, 0, tag, MPI_COMM_WORLD, &request);
+          std::string s = buf;
+
+          Block block2 = Block();
+          block2.deserialize(s);
+
+          cout << "I'm proc " << myRank << " and I've received a block" << endl;
+        }
+      }
+    }
+
+
+    // miner->addBlock(block);
+    // //cout << "One block mined by " << myRank << " !" << endl;
+    // time = Clock::now();
+    //
+    // stream << "[" << getStrTime(time) << "]" << " ";
+    // stream << "Block " << block->getId() << " mined in ";
+    // stream << chrono::duration_cast<chrono::milliseconds> (time-start).count() << " milliseconds." << endl;
   }
 
 

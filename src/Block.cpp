@@ -6,6 +6,10 @@ Block::Block(string hashPrevBlock, string target) {
   blockHeader = new BlockHeader(hashPrevBlock, target);
 }
 
+Block::Block() {
+  this->id = 0;
+}
+
 //Some getters and setters
 Block* Block::getPrev() {
   return this->prev;
