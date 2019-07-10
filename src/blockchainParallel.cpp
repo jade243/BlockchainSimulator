@@ -112,17 +112,13 @@ int main(int argc, char **argv) {
 
     while (!finishBlock) {
 
-      if (myRank == 0) {
+      //Miners try to mine their own block
+      isMining = miner->mine(block);
 
-        while(!isMining) {
-          isMining = miner->mine(block);
-        }
-        cout << "0 is mining, and isMining equals to " << isMining << endl;
-        finishBlock = true;
-      }
 
-      if (isMining) { //If the miner has found a new block
-        //He broadcast his block to all the network
+      if (isMining) { //If they succeed in doing so, ...
+
+        //They broadcast the block to all the network
         string s = block->serialize();
         cout << "I'm proc " << myRank << " and I've sent a block" << endl;
         for (int i=0; i<nProc; i++) {
@@ -130,22 +126,26 @@ int main(int argc, char **argv) {
             MPI_Isend(&s[0], s.size()+1, MPI_CHAR, i, tag, MPI_COMM_WORLD, &request);
           }
         }
-      } else {
-        //We check if we received a message
+
+      } else { //If they haven't mined their block, they check communication over the network
+
+        //They check if they have received a message
         MPI_Status status;
         int flag;
         MPI_Iprobe(0, tag, MPI_COMM_WORLD, &flag, &status);
 
+        //If yes, we know it's a string so they extract it
         if (flag) {
+          //We extract the length of the string
           int count;
           MPI_Get_count(&status, MPI_CHAR, &count);
 
+          //and the string itself
           char buf [count];
           MPI_Irecv(&buf, count, MPI_CHAR, 0, tag, MPI_COMM_WORLD, &request);
           std::string s = buf;
 
-          Block block2 = Block();
-          block2.deserialize(s);
+          block->deserialize(s);
 
           cout << "I'm proc " << myRank << " and I've received a block" << endl;
         }

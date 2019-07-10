@@ -17,11 +17,11 @@ If you need indications to run the code locally, please refer to the section at 
 
 ### Tasks list:
 
-- [ ] Selfish mining
-  - [ ] Simulate the finite state machine
+- [x] Selfish mining
+  - [x] Simulate the finite state machine
 - [ ] Version 2
 	- [x] Broadcast transactions with MPI, without using files
-	- [ ] Serialize blocks to send them with MPI
+	- [x] Serialize blocks to send them with MPI
 	- [ ] Implement the algorithm for the miners to broadcast mined blocks
 	- [ ] Improve the logs
 - [x] Version 1
@@ -35,6 +35,39 @@ If you need indications to run the code locally, please refer to the section at 
 	- [x] Modelize the main components: blocks, block headers, the blockchain itself
 	- [x] Implement a function to mine a block with SHA-256
 	- [x] Implement the algorithm so the miner mines severals blocks and add them in its blockchain
+
+## Version 2
+
+Algorithm to handle communication of blocks between miners :
+
+When mining a block :
+
+```
+if (miner i mines a block)
+    he broadcast his block to all the network
+```
+
+When receiving a block :
+
+```
+Miner i receives a block from miner j
+
+if (the previous hash block matches the last block of the chain)
+    the miner adds it at the end of his chain and starts mining on it
+
+else if (the block is the last one of the chain)
+    the miner forgets it and mine on his last block
+
+else if (the block appears in the chain but not in the last position)
+    the miner creates a forked chain and works on the first longest he received.
+
+else if (the block doesn't appear in the chain but the previous hash block does)
+    the miner creates a forked chain and works on the first longest he received.
+
+else (the block and the previous hash block are unknown to the miner)
+    the miner ask for the whole representation of the sender's chain and mines on the longest chain he received.
+```
+
 
 ## Version 1
 
