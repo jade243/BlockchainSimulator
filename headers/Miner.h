@@ -14,7 +14,8 @@ class Miner {
     string name;
     int id;
     vector<string> memPool;
-    Blockchain* blockchain = new Blockchain();
+    vector<Blockchain*> blockchains;
+    //Blockchain* blockchain = new Blockchain();
 
     string getString(stringstream& stream);
 

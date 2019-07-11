@@ -2,11 +2,14 @@
 
 //Constructors
 
-Miner::Miner() {}
+Miner::Miner() {
+  this->blockchains.push_back(new Blockchain());
+}
 
 Miner::Miner(string name, int id) {
   this->name = name;
   this->id = id;
+  this->blockchains.push_back(new Blockchain());
 }
 
 //Manipulation methods
@@ -31,7 +34,7 @@ void Miner::setTransactions(vector<string> transactions) {
 
 Block* Miner::fillBlock(Block* block, int nbTransactionsByBlock) {
 
-  block = new Block(this->blockchain->getHashPrevBlock(), this->blockchain->getTarget());
+  block = new Block(this->blockchains.at(0)->getHashPrevBlock(), this->blockchains.at(0)->getTarget());
 
   for (int i=0; i<nbTransactionsByBlock; i++) {
     if (this->memPool.size() >= 1) {
@@ -59,7 +62,7 @@ bool Miner::mine(Block* block) {
 }
 
 void Miner::addBlock(Block* block) {
-  this->blockchain->addBlock(block);
+  this->blockchains.at(0)->addBlock(block);
 }
 
 bool Miner::isEmpty() {
