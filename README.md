@@ -22,6 +22,8 @@ If you need indications to run the code locally, please refer to the section at 
 - [ ] Version 2
 	- [x] Broadcast transactions with MPI, without using files
 	- [x] Serialize blocks to send them with MPI
+  - [x] Serialize blockchains to send them with MPI
+  - [x] Add the possibility to fork chains
 	- [ ] Implement the algorithm for the miners to broadcast mined blocks
 	- [ ] Improve the logs
 - [x] Version 1

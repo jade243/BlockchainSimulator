@@ -29,12 +29,18 @@ class Miner {
     bool mine(Block* block);
     void addBlock(Block* block);
     bool isEmpty();
+    void clearBlockchains();
 
+    void createForkChain();
     string serializeTransactions(vector<string> transactions);
     vector<string> deserializeTransactions(string s);
+
+    void deserializeBlockchain(string s);
+    string serializeBlockchain(int pos);
 
     int getLastID();
 
     void printInfos();
+    void printBlockchain(int pos);
 
 };

@@ -9,6 +9,7 @@ void Blockchain::addBlock(Block* block) {
   this->blockID += 1;
   block->setId(this->blockID+1);
   if (head == NULL) {       //If it's the first block...
+    block->setPrev(NULL);
     head = block;
   }
   else {                    //If not, ...
@@ -58,5 +59,78 @@ void Blockchain::displayChain() {
   }
   else {
     cout << "The chain is empty" << endl;
+  }
+}
+
+void Blockchain::displayShortRep() {
+  if (head != NULL) {
+    int count = 0;
+    Block* tmp = head;
+    while (tmp != NULL) {
+      count += 1;
+      tmp = tmp->getPrev();
+    }
+    cout << "There are " << count << " blocks in the chain and the first one is " << head->getShortRep() << endl;
+
+  } else {
+    cout << "The blockchain is empty" << endl;
+  }
+}
+
+//Serialization Methods
+string Blockchain::serialize() {
+  stringstream stream;
+  stream << false << endl; //To indicate we send the whole chain
+
+  if (head != NULL) {
+    Block* tmp = head;
+
+    while (tmp != NULL) {
+      stream << "new" << endl;
+      stream << tmp->serialize() << endl;
+      tmp = tmp->getPrev();
+    }
+  } else {
+    stream << -1 << endl; //To indicate the chain is empty
+  }
+  return stream.str();
+}
+
+string Blockchain::getString(stringstream& stream) {
+  int size = 1024;
+  char line[size];
+  stream.getline(line, size);
+  string line_tmp = line;
+  return line_tmp;
+}
+
+void Blockchain::deserialize(string s) {
+  stringstream stream;
+  stream.str(s);
+  head = NULL;
+  blockID = -1;
+
+  stringstream stream_tmp;
+
+  string line = getString(stream);
+  if (line == "0") {
+    line = getString(stream); // We remove the first "new"
+    Block* block = new Block();
+
+    if (line != "-1") {
+      while (!stream.eof()) {
+        string line = getString(stream);
+        stream_tmp.str("");
+
+        while (line != "new" && !stream.eof()) {
+          stream_tmp << line << endl;
+          line = getString(stream);
+        }
+
+        block = new Block();
+        block->deserialize(stream_tmp.str());
+        this->addBlock(block);
+      }
+    }
   }
 }

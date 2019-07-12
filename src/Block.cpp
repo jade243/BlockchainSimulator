@@ -54,10 +54,16 @@ void Block::printBlock() {
   cout << "Block id : " << this->shortRep << "..." << endl;
 }
 
-void Block::printTransactions() {
+void Block::printTransactions(int nbTransactions) {
   cout << "There are " << this->transactions.size() << " transactions." << endl;
-  for (unsigned int i=0; i<this->transactions.size(); i++) {
-    cout << this->transactions.at(i) << endl;
+  if (static_cast<unsigned int>(nbTransactions) <= this->transactions.size()) {
+    for (int i=0; i<nbTransactions; i++) {
+      cout << this->transactions.at(i) << endl;
+    }
+  } else {
+    for (unsigned int i=0; i<this->transactions.size(); i++) {
+      cout << this->transactions.at(i) << endl;
+    }
   }
 }
 
@@ -102,6 +108,7 @@ void Block::deserialize(string s) {
 
   this->id = stoi(getString(stream));
 
+  transactions.clear();
   while (!stream.eof()) {
     this->transactions.push_back(getString(stream));
   }

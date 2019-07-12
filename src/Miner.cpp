@@ -27,6 +27,10 @@ void Miner::getTransactionsFromFile(string fileName) {
   }
 }
 
+void Miner::createForkChain() {
+  this->blockchains.push_back(new Blockchain());
+}
+
 void Miner::setTransactions(vector<string> transactions) {
   //this->memPool.assign(transactions.begin(), transactions.end());
   this->memPool = transactions;
@@ -81,6 +85,12 @@ void Miner::printInfos() {
   }
 }
 
+void Miner::printBlockchain(int pos) {
+  if ((static_cast<unsigned int>(pos) < this->blockchains.size())) {
+    this->blockchains.at(pos)->displayShortRep();
+  }
+}
+
 //Methods for serialization / deserialization to send objects
 string Miner::serializeTransactions(vector<string> transactions) {
   stringstream stream;
@@ -108,4 +118,21 @@ string Miner::getString(stringstream& stream) {
   stream.getline(line, size);
   string line_tmp = line;
   return line_tmp;
+}
+
+void Miner::clearBlockchains() {
+  this->blockchains.clear();
+  this->blockchains.push_back(new Blockchain());
+}
+
+string Miner::serializeBlockchain(int pos) {
+  if ((static_cast<unsigned int>(pos) < this->blockchains.size())) {
+    return this->blockchains.at(pos)->serialize();
+  }
+  return NULL;
+}
+
+void Miner::deserializeBlockchain(string s) {
+  this->createForkChain();
+  this->blockchains.at(this->blockchains.size()-1)->deserialize(s);
 }

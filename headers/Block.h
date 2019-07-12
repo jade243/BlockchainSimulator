@@ -40,5 +40,5 @@ class Block {
     //Some printing functions
     void computeId();
     void printBlock();
-    void printTransactions();
+    void printTransactions(int nbTransactions);
 };

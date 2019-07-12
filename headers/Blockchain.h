@@ -11,6 +11,8 @@ class Blockchain {
     string target = "1f0696f4"; //Target for any new block in the blockchain
     int blockID = -1;
 
+    string getString(stringstream& stream);
+
   public:
     Blockchain();
     void addBlock(Block* block);  //To add a block
@@ -18,6 +20,11 @@ class Blockchain {
     void displayChain();          //To print the blockchain in the console
     string getHashPrevBlock();    //To get the last block's hash
     string getTarget();
+
+    string serialize();
+    void deserialize(string s);
+
+    void displayShortRep();
 
 
 };
