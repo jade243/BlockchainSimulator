@@ -35,40 +35,13 @@ void Block::setId(int id) {
   this->id = id;
 }
 
-//Manipulation related to transactions
-void Block::addTransaction(string transaction) {
-  this->transactions.push_back(transaction);
-}
-
-void Block::buildMerkleTree() {
-  this->getBlockHeader()->setHashMerkleRoot(MerkleTree::getMerkleRoot(this->transactions));
-}
-
-//Some printing functions
 void Block::computeId() {
   //We extract the 10 first bytes of the bloch header's hash
   this->shortRep = blockHeader->hashOperation().substr(0, 10);
 }
 
-void Block::printBlock() {
-  cout << "Block id : " << this->shortRep << "..." << endl;
-}
 
-void Block::printTransactions(int nbTransactions) {
-  cout << "There are " << this->transactions.size() << " transactions." << endl;
-  if (static_cast<unsigned int>(nbTransactions) <= this->transactions.size()) {
-    for (int i=0; i<nbTransactions; i++) {
-      cout << this->transactions.at(i) << endl;
-    }
-  } else {
-    for (unsigned int i=0; i<this->transactions.size(); i++) {
-      cout << this->transactions.at(i) << endl;
-    }
-  }
-}
-
-//Methods for serialization
-
+//Methods to send and receive blocks
 string Block::serialize() {
   stringstream stream;
   stream << true << endl;
@@ -116,5 +89,32 @@ void Block::deserialize(string s) {
     }
 
     this->computeId();
+  }
+}
+
+//Manipulation related to transactions
+void Block::addTransaction(string transaction) {
+  this->transactions.push_back(transaction);
+}
+
+void Block::buildMerkleTree() {
+  this->getBlockHeader()->setHashMerkleRoot(MerkleTree::getMerkleRoot(this->transactions));
+}
+
+//Some printing functions
+void Block::printBlock() {
+  cout << "Block id : " << this->shortRep << "..." << endl;
+}
+
+void Block::printTransactions(int nbTransactions) {
+  cout << "There are " << this->transactions.size() << " transactions." << endl;
+  if (static_cast<unsigned int>(nbTransactions) <= this->transactions.size()) {
+    for (int i=0; i<nbTransactions; i++) {
+      cout << this->transactions.at(i) << endl;
+    }
+  } else {
+    for (unsigned int i=0; i<this->transactions.size(); i++) {
+      cout << this->transactions.at(i) << endl;
+    }
   }
 }

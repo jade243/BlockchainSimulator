@@ -17,27 +17,31 @@ class BlockHeader {
     string target;                //expected target for the hash
     string nonce;                 //random number
 
-    //Methods
+    //Private Methods
     string int2Hex(int number);
 
   public:
+    //Constructors
     BlockHeader(string hashPrevBlock, string target);
     BlockHeader(string version, string hashPrevBlock, string hashMerkleRoot, string time, string target, string nonce);
 
-    //Some getters and setters
+    //Getters and setters
     string getNonce();
     void setNonce(long unsigned int nonce);
+
     string getTarget();
-    string getHashPrevBlock();
     void setTarget(string target);
-    void setHashMerkleRoot(string merkleRoot);
-    string getVersion();
+
     string getHashMerkleRoot();
+    void setHashMerkleRoot(string merkleRoot);
+
+    string getVersion();
+    string getHashPrevBlock();
     string getTime();
 
+    //Manipulation methods
     string hashOperation();   //To perform the hash operation of the block header
     string toString();        //To create one string with all the fields
-
     string target2Hex();      //To transform the target
 
     //Some printing functions

@@ -1,28 +1,11 @@
 #include "../headers/Blockchain.h"
 
+//Constructors
 Blockchain::Blockchain() {
   head = NULL;
 }
 
-//To add a block in the blockchain
-void Blockchain::addBlock(Block* block) {
-  this->blockID += 1;
-  block->setId(this->blockID+1);
-  if (head == NULL) {       //If it's the first block...
-    block->setPrev(NULL);
-    head = block;
-  }
-  else {                    //If not, ...
-    block->setPrev(head);
-    head = block;
-  }
-}
-
-//To get the last block
-Block* Blockchain::consultLastBlock() {
-  return this->head;
-}
-
+//Getters and setters
 //To get the last block's hash
 string Blockchain::getHashPrevBlock() {
   string hash;
@@ -41,40 +24,24 @@ string Blockchain::getTarget() {
   return this->target;
 }
 
-//To print the block chain in the console
-void Blockchain::displayChain() {
-  if (head != NULL) {
-    string hashPrevBlock;
-    Block* tmp = head;
-    while (tmp != NULL) {
-      tmp->printBlock();
-      hashPrevBlock = tmp->getBlockHeader()->getHashPrevBlock();
-      cout << "\t^" << "\t" << "prev : " << hashPrevBlock << endl <<
-              "\t|" << "\t" << "target : " << tmp->getBlockHeader()->target2Hex() << endl <<
-              "\t|" << endl <<
-              "\t|" << endl;
-      tmp = tmp->getPrev();
-    }
-    cout << "Block 0 : " << hashPrevBlock.substr(0, 10) << "..." << endl;
+//Blockchain manipulation
+//To add a block in the blockchain
+void Blockchain::addBlock(Block* block) {
+  this->blockID += 1;
+  block->setId(this->blockID+1);
+  if (head == NULL) {       //If it's the first block...
+    block->setPrev(NULL);
+    head = block;
   }
-  else {
-    cout << "The chain is empty" << endl;
+  else {                    //If not, ...
+    block->setPrev(head);
+    head = block;
   }
 }
 
-void Blockchain::displayShortRep() {
-  if (head != NULL) {
-    int count = 0;
-    Block* tmp = head;
-    while (tmp != NULL) {
-      count += 1;
-      tmp = tmp->getPrev();
-    }
-    cout << "There are " << count << " blocks in the chain and the first one is " << head->getShortRep() << endl;
-
-  } else {
-    cout << "The blockchain is empty" << endl;
-  }
+//To get the last block
+Block* Blockchain::consultLastBlock() {
+  return this->head;
 }
 
 //Serialization Methods
@@ -132,5 +99,43 @@ void Blockchain::deserialize(string s) {
         this->addBlock(block);
       }
     }
+  }
+}
+
+
+//Printing methods
+//To print the block chain in the console
+void Blockchain::displayChain() {
+  if (head != NULL) {
+    string hashPrevBlock;
+    Block* tmp = head;
+    while (tmp != NULL) {
+      tmp->printBlock();
+      hashPrevBlock = tmp->getBlockHeader()->getHashPrevBlock();
+      cout << "\t^" << "\t" << "prev : " << hashPrevBlock << endl <<
+              "\t|" << "\t" << "target : " << tmp->getBlockHeader()->target2Hex() << endl <<
+              "\t|" << endl <<
+              "\t|" << endl;
+      tmp = tmp->getPrev();
+    }
+    cout << "Block 0 : " << hashPrevBlock.substr(0, 10) << "..." << endl;
+  }
+  else {
+    cout << "The chain is empty" << endl;
+  }
+}
+
+void Blockchain::displayShortRep() {
+  if (head != NULL) {
+    int count = 0;
+    Block* tmp = head;
+    while (tmp != NULL) {
+      count += 1;
+      tmp = tmp->getPrev();
+    }
+    cout << "There are " << count << " blocks in the chain and the first one is " << head->getShortRep() << endl;
+
+  } else {
+    cout << "The blockchain is empty" << endl;
   }
 }

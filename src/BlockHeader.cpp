@@ -4,6 +4,7 @@
 
 using namespace std;
 
+//Constructors
 BlockHeader::BlockHeader(string hashPrevBlock, string target) {
   this->hashPrevBlock = hashPrevBlock;
 
@@ -28,15 +29,6 @@ BlockHeader::BlockHeader(string version, string hashPrevBlock, string hashMerkle
   this->nonce = nonce;
 }
 
-//Function to convert a decimal number in hexadecimal
-string BlockHeader::int2Hex(int number) {
-  stringstream stream;
-  stream << hex << number;
-  string result( stream.str() );
-  return result;
-}
-
-
 //Getters and setters
 string BlockHeader::getNonce() {
   return this->nonce;
@@ -50,30 +42,41 @@ string BlockHeader::getTarget() {
   return this->target;
 }
 
-string BlockHeader::getHashPrevBlock() {
-  return this->hashPrevBlock;
-}
-
 void BlockHeader::setTarget(string target) {
   this->target = target;
-}
-
-void BlockHeader::setHashMerkleRoot(string merkleRoot) {
-  this->hashMerkleRoot = merkleRoot;
-}
-
-string BlockHeader::getVersion() {
-  return this->version;
 }
 
 string BlockHeader::getHashMerkleRoot() {
   return this->hashMerkleRoot;
 }
 
+void BlockHeader::setHashMerkleRoot(string merkleRoot) {
+  this->hashMerkleRoot = merkleRoot;
+}
+
+string BlockHeader::getHashPrevBlock() {
+  return this->hashPrevBlock;
+}
+
+string BlockHeader::getVersion() {
+  return this->version;
+}
+
 string BlockHeader::getTime() {
   return this->time;
 }
 
+//Private methods
+//Function to convert a decimal number in hexadecimal
+string BlockHeader::int2Hex(int number) {
+  stringstream stream;
+  stream << hex << number;
+  string result( stream.str() );
+  return result;
+}
+
+
+//Manipulation methods
 //Performs the hash operation on the block header
 //The operation used is SHA256(SHA256(blockheader))
 string BlockHeader::hashOperation() {

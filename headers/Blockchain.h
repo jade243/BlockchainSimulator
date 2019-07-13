@@ -14,17 +14,29 @@ class Blockchain {
     string getString(stringstream& stream);
 
   public:
+
+    //Constructors
     Blockchain();
-    void addBlock(Block* block);  //To add a block
-    Block* consultLastBlock();    //To get the last block
-    void displayChain();          //To print the blockchain in the console
+
+    //Getters and setters
     string getHashPrevBlock();    //To get the last block's hash
     string getTarget();
 
+    //Blockchain manipulation
+    void addBlock(Block* block);  //To add a block
+    Block* consultLastBlock();    //To get the last block
+
+    //Serialization methods
     string serialize();
     void deserialize(string s);
 
-    void displayShortRep();
+    //Printing methods
+    void displayChain();          //To print the blockchain in the console
+    void displayShortRep();       //Print the number of blocks in the chain and the hash of the last block
+
+
+
+
 
 
 };
