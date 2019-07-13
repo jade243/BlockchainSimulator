@@ -116,7 +116,11 @@ int main(int argc, char **argv) {
     MPI_Barrier(MPI_COMM_WORLD);
 
     if (myRank == 0) {cout << endl << "===== We test sending an empty blockchain to all the network =====" << endl;}
-    testSendingEmptyBlockchain(miner, nbTransactionsByBlock, myRank, nProc, tag);
+    testSendingEmptyBlockchain(miner, myRank, nProc, tag);
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    if (myRank == 0) {cout << endl << "===== We test sending a block or a blockchain randomly =====" << endl;}
+    testSendingBlockOrBlockchain(miner, nbTransactionsByBlock, myRank, nProc, tag);
     MPI_Barrier(MPI_COMM_WORLD);
 
   } else {

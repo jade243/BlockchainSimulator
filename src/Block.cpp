@@ -71,6 +71,7 @@ void Block::printTransactions(int nbTransactions) {
 
 string Block::serialize() {
   stringstream stream;
+  stream << true << endl;
   stream << blockHeader->getVersion() << endl;
   stream << blockHeader->getHashPrevBlock() << endl;
   stream << blockHeader->getHashMerkleRoot() << endl;
@@ -97,21 +98,23 @@ void Block::deserialize(string s) {
   stringstream stream;
   stream.str(s);
 
-  string version = getString(stream);
-  string hashPrevBlock = getString(stream);
-  string hashMerkleRoot = getString(stream);
-  string time = getString(stream);
-  string target = getString(stream);
-  string nonce = getString(stream);
-  BlockHeader* blockHeader = new BlockHeader(version, hashPrevBlock, hashMerkleRoot, time, target, nonce);
-  this->blockHeader = blockHeader;
+  if (getString(stream) == "1") {
+    string version = getString(stream);
+    string hashPrevBlock = getString(stream);
+    string hashMerkleRoot = getString(stream);
+    string time = getString(stream);
+    string target = getString(stream);
+    string nonce = getString(stream);
+    BlockHeader* blockHeader = new BlockHeader(version, hashPrevBlock, hashMerkleRoot, time, target, nonce);
+    this->blockHeader = blockHeader;
 
-  this->id = stoi(getString(stream));
+    this->id = stoi(getString(stream));
 
-  transactions.clear();
-  while (!stream.eof()) {
-    this->transactions.push_back(getString(stream));
+    transactions.clear();
+    while (!stream.eof()) {
+      this->transactions.push_back(getString(stream));
+    }
+
+    this->computeId();
   }
-
-  this->computeId();
 }

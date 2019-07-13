@@ -136,3 +136,12 @@ void Miner::deserializeBlockchain(string s) {
   this->createForkChain();
   this->blockchains.at(this->blockchains.size()-1)->deserialize(s);
 }
+
+bool Miner::isBlock(string s) {
+  stringstream stream;
+  stream.str(s);
+
+  string line = getString(stream);
+  return line == "1";
+
+}
