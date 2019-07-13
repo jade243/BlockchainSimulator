@@ -256,7 +256,7 @@ void testSendingBlockOrBlockchain(Miner* miner, int nbTransactionsByBlock, int m
         MPI_Irecv(&buf, count, MPI_CHAR, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &request);
         std::string s = buf;
 
-        bool sentBlock = miner->isBlock(s);
+        int sentBlock = miner->getMessageType(s);
 
         if (sentBlock)
           cout << "Proc " << myRank << " : This is a block" << endl;

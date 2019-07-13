@@ -38,7 +38,7 @@ class Miner {
     void deserializeBlockchain(string s);
     string serializeBlockchain(int pos);
 
-    bool isBlock(string s);
+    int getMessageType(string s);
 
     int getLastID();
 

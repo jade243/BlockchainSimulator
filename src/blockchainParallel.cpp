@@ -20,7 +20,7 @@ string getStrTime(chrono::time_point<Clock> chrono) {
 int main(int argc, char **argv) {
 
   //===== Personal parameters =====
-  bool isTesting = true;
+  bool isTesting = false;
 
   //===== Recovery and initialization of parameters =====
   int nbTransactions = 0, nbTransactionsByBlock = 0;
@@ -126,9 +126,11 @@ int main(int argc, char **argv) {
   } else {
     bool finishBlock = false;
     bool isMining = false;
+
+    //The miners will need to empty their memPool
     while (!miner->isEmpty()) {
 
-      //The miner construct a block
+      //Miners construct a block
       block = miner->fillBlock(block, nbTransactionsByBlock);
       block->buildMerkleTree();
 
@@ -141,27 +143,19 @@ int main(int argc, char **argv) {
         isMining = miner->mine(block);
 
 
-        if (isMining && myRank == 0) { //If they succeed in doing so, ...
+        if (isMining) { //If they succeed in doing so, ...
 
+          //They add the block to their longest blockchain
           miner->addBlock(block);
 
           //They broadcast the block to all the network
-          string s = miner->serializeBlockchain(0);
+          string s = block->serialize();
           cout << "I'm proc " << myRank << " and I've sent a blockchain" << endl;
           for (int i=0; i<nProc; i++) {
             if (i != myRank) {
               MPI_Isend(&s[0], s.size()+1, MPI_CHAR, i, tag, MPI_COMM_WORLD, &request);
             }
           }
-
-          // //They broadcast the block to all the network
-          // string s = block->serialize();
-          // cout << "I'm proc " << myRank << " and I've sent a block" << endl;
-          // for (int i=0; i<nProc; i++) {
-          //   if (i != myRank) {
-          //     MPI_Isend(&s[0], s.size()+1, MPI_CHAR, i, tag, MPI_COMM_WORLD, &request);
-          //   }
-          // }
 
         } else { //If they haven't mined their block, they check communication over the network
 
@@ -181,9 +175,9 @@ int main(int argc, char **argv) {
             MPI_Irecv(&buf, count, MPI_CHAR, 0, tag, MPI_COMM_WORLD, &request);
             std::string s = buf;
 
-            block->deserialize(s);
+            int messageType = miner->getMessageType(s);
 
-            cout << "I'm proc " << myRank << " and I've received a block" << endl;
+            cout << "I'm proc " << myRank << " and I've received a message with the type : " << messageType << endl;
           }
         }
       }
