@@ -150,34 +150,48 @@ int main(int argc, char **argv) {
 
           //They broadcast the block to all the network
           string s = block->serialize();
-          cout << "I'm proc " << myRank << " and I've sent a blockchain" << endl;
+          cout << "I'm proc " << myRank << " and I've sent a message" << endl << "Sender ";
+          block->printBlock();
           for (int i=0; i<nProc; i++) {
             if (i != myRank) {
               MPI_Isend(&s[0], s.size()+1, MPI_CHAR, i, tag, MPI_COMM_WORLD, &request);
             }
           }
 
-        } else { //If they haven't mined their block, they check communication over the network
+          isMining = false;
+          block = miner->fillBlock(block, nbTransactionsByBlock);
+          block->buildMerkleTree();
 
-          //They check if they have received a message
-          MPI_Status status;
-          int flag;
-          MPI_Iprobe(0, tag, MPI_COMM_WORLD, &flag, &status);
+        }
 
-          //If yes, we know it's a string so they extract it
-          if (flag) {
-            //We extract the length of the string
-            int count;
-            MPI_Get_count(&status, MPI_CHAR, &count);
+        //If they haven't mined their block, they check communication over the network
 
-            //and the string itself
-            char buf [count];
-            MPI_Irecv(&buf, count, MPI_CHAR, 0, tag, MPI_COMM_WORLD, &request);
-            std::string s = buf;
+        //They check if they have received a message
+        MPI_Status status;
+        int flag;
+        MPI_Iprobe(MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &flag, &status);
 
-            int messageType = miner->getMessageType(s);
+        //If yes, we know it's a string so they extract it
+        if (flag) {
+          //We extract the length of the string
+          int count;
+          MPI_Get_count(&status, MPI_CHAR, &count);
 
-            cout << "I'm proc " << myRank << " and I've received a message with the type : " << messageType << endl;
+          //and the string itself
+          char buf [count];
+          MPI_Irecv(&buf, count, MPI_CHAR, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &request);
+          std::string s = buf;
+
+          int messageType = miner->getMessageType(s);
+
+          if (messageType == 0) {       //The miner receives a blockchain
+            cout << "I'm proc " << myRank << " and I've received a blockchain" << endl;
+          }
+          else if (messageType == 1) {  //The miner receives a block
+            cout << "I'm proc " << myRank << " and I've received a block" << endl;
+            Block* receivedBlock = new Block();
+            receivedBlock->deserialize(s);
+            receivedBlock->printBlock();
           }
         }
       }

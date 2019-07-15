@@ -93,6 +93,8 @@ void Block::deserialize(string s) {
     }
 
     this->computeId();
+  } else {
+    cout << "The string doesn't start by 1" << endl;
   }
 }
 
