@@ -40,6 +40,10 @@ void Block::computeId() {
   this->shortRep = blockHeader->hashOperation().substr(0, 10);
 }
 
+string Block::getHash() {
+  return blockHeader->hashOperation();
+}
+
 
 //Methods to send and receive blocks
 string Block::serialize() {

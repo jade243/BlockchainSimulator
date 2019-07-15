@@ -28,7 +28,8 @@ class Block {
     string getShortRep();
     int getId();
     void setId(int id);
-    void computeId();
+    void computeId();         //The first 10 blocks of the block hash
+    string Block::getHash()   //The block hash
 
     //Methods to send and receive blocks
     string serialize();
