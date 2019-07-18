@@ -2,7 +2,11 @@
 
 //Constructors
 Blockchain::Blockchain() {
-  head = NULL;
+  this->head = NULL;
+}
+
+Blockchain::Blockchain(Block* head) {
+  this->head = head;
 }
 
 //Getters and setters
@@ -10,8 +14,7 @@ Blockchain::Blockchain() {
 string Blockchain::getHashPrevBlock() {
   string hash;
   if (head == NULL) { //In case, the blockchain is empty, ...
-    string block0 = "This is the first block";
-    picosha2::hash256_hex_string(block0, hash);
+    hash = getGenesisHash();
   }
   else { //Otherwise, we return the last hash
     hash = head->getBlockHeader()->hashOperation();
@@ -19,9 +22,20 @@ string Blockchain::getHashPrevBlock() {
   return hash;
 }
 
+string Blockchain::getGenesisHash() {
+  string hash;
+  string block0 = "This is the first block";
+  picosha2::hash256_hex_string(block0, hash);
+  return hash;
+}
+
 //To get the actual target
 string Blockchain::getTarget() {
   return this->target;
+}
+
+int Blockchain::getLastID() {
+  return this->blockID;
 }
 
 //Blockchain manipulation

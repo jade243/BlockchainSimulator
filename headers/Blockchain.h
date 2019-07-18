@@ -17,10 +17,13 @@ class Blockchain {
 
     //Constructors
     Blockchain();
+    Blockchain(Block* head);
 
     //Getters and setters
     string getHashPrevBlock();    //To get the last block's hash
+    string getGenesisHash();
     string getTarget();
+    int getLastID();
 
     //Blockchain manipulation
     void addBlock(Block* block);  //To add a block

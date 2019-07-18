@@ -28,21 +28,30 @@ class Miner {
     Block* fillBlock(Block* block, int nbTransactionsByBlock);
     bool mine(Block* block);
     void addBlock(Block* block);
+    void addBlock(Block* block, int pos);
     bool isEmpty();
     void clearBlockchains();
 
-    void createForkChain();
+    string getGenesisHash();
+    bool updateMemPool(Block* newBlock, Block* oldBlock);
+
+    void createForkChain(Block* head);
+    int lastIndex();
     string serializeTransactions(vector<string> transactions);
     vector<string> deserializeTransactions(string s);
 
     void deserializeBlockchain(string s);
     string serializeBlockchain(int pos);
 
+    bool handleReceivedBlock(Block* block);
+    string getHashPrevBlock();
+
     int getMessageType(string s);
 
     int getLastID();
 
     void printInfos();
+    void printAllInfos(int myRank);
     void printBlockchain(int pos);
 
 };

@@ -36,6 +36,7 @@ int main(int argc, char **argv) {
 
   int nbBlocks = (int)(nbTransactions/nbTransactionsByBlock);
   int nbUsers = 10;
+  int difficulty = 3;
 
   //===== Initialising MPI ======
   int myRank, nProc; //Variables to know the rank of the current process and the number of processes
@@ -49,7 +50,7 @@ int main(int argc, char **argv) {
   //Data
   vector<string> transactions;
   Miner* miner = new Miner("", myRank);
-  Block* block = new Block();
+  Block* block;
 
   //To communicate the transactions
   string stringComm;
@@ -100,7 +101,6 @@ int main(int argc, char **argv) {
     stream << chrono::duration_cast<chrono::milliseconds> (time-start).count() << " milliseconds." << endl;
   }
 
-
   MPI_Barrier(MPI_COMM_WORLD);
   //===== Now, all nodes are ready and are in the same state =====
 
@@ -131,6 +131,7 @@ int main(int argc, char **argv) {
     while (!miner->isEmpty()) {
 
       //Miners construct a block
+      block = new Block(miner->getHashPrevBlock(), difficulty);
       block = miner->fillBlock(block, nbTransactionsByBlock);
       block->buildMerkleTree();
 
@@ -142,7 +143,6 @@ int main(int argc, char **argv) {
         //Miners try to mine their own block
         isMining = miner->mine(block);
 
-
         if (isMining) { //If they succeed in doing so, ...
 
           //They add the block to their longest blockchain
@@ -150,17 +150,14 @@ int main(int argc, char **argv) {
 
           //They broadcast the block to all the network
           string s = block->serialize();
-          cout << "I'm proc " << myRank << " and I've sent a message" << endl << "Sender ";
-          block->printBlock();
+          cout << "I'm proc " << myRank << " and I've sent a block " << block->getShortRep() << endl;
           for (int i=0; i<nProc; i++) {
             if (i != myRank) {
               MPI_Isend(&s[0], s.size()+1, MPI_CHAR, i, tag, MPI_COMM_WORLD, &request);
             }
           }
 
-          isMining = false;
-          block = miner->fillBlock(block, nbTransactionsByBlock);
-          block->buildMerkleTree();
+          finishBlock = true;
 
         }
 
@@ -188,23 +185,21 @@ int main(int argc, char **argv) {
             cout << "I'm proc " << myRank << " and I've received a blockchain" << endl;
           }
           else if (messageType == 1) {  //The miner receives a block
-            cout << "I'm proc " << myRank << " and I've received a block" << endl;
             Block* receivedBlock = new Block();
             receivedBlock->deserialize(s);
-            receivedBlock->printBlock();
+
+            cout << "I'm proc " << myRank << " and I've received a block " << receivedBlock->getShortRep() << endl;
+
+            finishBlock = miner->handleReceivedBlock(receivedBlock);
+            if (finishBlock)
+              miner->updateMemPool(receivedBlock, block);
           }
         }
       }
 
-
-      // miner->addBlock(block);
-      // //cout << "One block mined by " << myRank << " !" << endl;
-      // time = Clock::now();
-      //
-      // stream << "[" << getStrTime(time) << "]" << " ";
-      // stream << "Block " << block->getId() << " mined in ";
-      // stream << chrono::duration_cast<chrono::milliseconds> (time-start).count() << " milliseconds." << endl;
     }
+
+    miner->printAllInfos(myRank);
 
 
     //===== There, all nodes have finished =====

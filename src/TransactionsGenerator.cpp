@@ -33,7 +33,7 @@ vector<string> TransactionsGenerator::generateVectorTransactions() {
     users[payee-1] += amount;
 
     //We add the transaction to the vector
-    stream << "User " << payer << " gives " << amount << " bitcoin(s) to " << payee << ".\n";
+    stream << "User " << payer << " gives " << amount << " bitcoin(s) to " << payee << ".";
     transactions.push_back(stream.str());
     stream.str("");
   }
@@ -42,7 +42,7 @@ vector<string> TransactionsGenerator::generateVectorTransactions() {
 
   //We start by saving the initial amounts
   for (int i=0; i<this->nbUsers; i++) {
-    stream << "User " << i+1 << " starts with " << initialAmount[i] << " bitcoin(s).\n";
+    stream << "User " << i+1 << " starts with " << initialAmount[i] << " bitcoin(s).";
     coinbases.push_back(stream.str());
     stream.str("");
   }

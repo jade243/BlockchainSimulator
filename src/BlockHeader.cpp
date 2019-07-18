@@ -117,8 +117,8 @@ string BlockHeader::target2Hex() {
 
   //We construct the final target so it has a length of 64 to match the length
   //of the hash function
-  string headTarget(64-nbBytes*2, '0');
-  string finalTarget(nbBytes*2-coeff.length(), '0');
+  string headTarget(64-nbBytes-6, '0');
+  string finalTarget(nbBytes, '0');
   finalTarget = headTarget + coeff + finalTarget;
   return finalTarget;
 }

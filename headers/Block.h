@@ -14,10 +14,12 @@ class Block {
     string shortRep;                  //it's the 10 first bytes of the hash (to optimize visualization)
     vector<string> transactions;      //List of transactions
 
+    string createTarget(int difficulty);
     string getString(stringstream& stream);
 
   public:
     //Constructor
+    Block(string hashPrevBlock, int difficulty);
     Block(string hashPrevBlock, string target);
     Block();
 
@@ -25,6 +27,7 @@ class Block {
     Block* getPrev();
     void setPrev(Block* prev);
     BlockHeader* getBlockHeader();
+    vector<string> getTransactions();
     string getShortRep();
     int getId();
     void setId(int id);

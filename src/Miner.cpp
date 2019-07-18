@@ -27,8 +27,12 @@ void Miner::getTransactionsFromFile(string fileName) {
   }
 }
 
-void Miner::createForkChain() {
-  this->blockchains.push_back(new Blockchain());
+void Miner::createForkChain(Block* head) {
+  this->blockchains.push_back(new Blockchain(head));
+}
+
+int Miner::lastIndex() {
+  return this->blockchains.size();
 }
 
 void Miner::setTransactions(vector<string> transactions) {
@@ -37,9 +41,6 @@ void Miner::setTransactions(vector<string> transactions) {
 }
 
 Block* Miner::fillBlock(Block* block, int nbTransactionsByBlock) {
-
-  block = new Block(this->blockchains.at(0)->getHashPrevBlock(), this->blockchains.at(0)->getTarget());
-
   for (int i=0; i<nbTransactionsByBlock; i++) {
     if (this->memPool.size() >= 1) {
       block->addTransaction(this->memPool.at(0));
@@ -47,6 +48,10 @@ Block* Miner::fillBlock(Block* block, int nbTransactionsByBlock) {
     }
   }
   return block;
+}
+
+string Miner::getHashPrevBlock() {
+  return this->blockchains.at(0)->getHashPrevBlock();
 }
 
 //To mine a block
@@ -69,6 +74,10 @@ void Miner::addBlock(Block* block) {
   this->blockchains.at(0)->addBlock(block);
 }
 
+void Miner::addBlock(Block* block, int pos) {
+  this->blockchains.at(pos)->addBlock(block);
+}
+
 bool Miner::isEmpty() {
   return this->memPool.empty();
 }
@@ -82,6 +91,15 @@ void Miner::printInfos() {
   } else {
     for(size_t i=0; i<this->memPool.size(); ++i)
       cout << this->memPool[i] << endl;
+  }
+}
+
+void Miner::printAllInfos(int myRank) {
+  cout << "The miner " << myRank << " has " << blockchains.size() << " forks." << endl;
+  for (size_t i=0; i<blockchains.size(); i++) {
+    cout << "Blockchain n°" << i << endl;
+    blockchains.at(i)->displayShortRep();
+    cout << endl << endl;
   }
 }
 
@@ -133,7 +151,7 @@ string Miner::serializeBlockchain(int pos) {
 }
 
 void Miner::deserializeBlockchain(string s) {
-  this->createForkChain();
+  this->createForkChain(NULL);
   this->blockchains.at(this->blockchains.size()-1)->deserialize(s);
 }
 
@@ -143,4 +161,111 @@ int Miner::getMessageType(string s) {
 
   string line = getString(stream);
   return stoi(line);
+}
+
+bool Miner::updateMemPool(Block* newBlock, Block* oldBlock) {
+  //We push front the transactions of the old block
+  for(auto const& transaction: oldBlock->getTransactions()) {
+    memPool.insert(memPool.begin(), transaction);
+  }
+
+  vector<string>::iterator it;
+
+  for (auto const& transaction: newBlock->getTransactions()) {
+    it = find(memPool.begin(), memPool.end(), transaction);
+
+    if (it != memPool.end()) {
+      int index = distance(memPool.begin(), it);
+      memPool.erase(memPool.begin()+index);
+    }
+    else {
+      cout << "Element not found in myvector" << endl;
+      return false;
+    }
+  }
+  return true;
+
+}
+
+string Miner::getGenesisHash() {
+  return this->blockchains.at(0)->getGenesisHash();
+}
+
+static bool compSizes(Blockchain* a, Blockchain* b) {
+  return a->getLastID() < b->getLastID();
+}
+
+
+//Methods when receiving a block
+bool Miner::handleReceivedBlock(Block* block) {
+  //We extract the hash of the previous block from which the block was built
+  string hashPrev = block->getBlockHeader()->getHashPrevBlock();
+  string hash = block->getHash();
+
+  bool newBlockToLongestChain = false;
+
+  //cout << "Pass 2" << endl;
+
+  bool foundBlock = false;
+  //We check if it's part of one of our fork chains
+  for (size_t i=0; i<blockchains.size(); i++) {
+
+    Block* tmp = blockchains.at(i)->consultLastBlock();
+
+    // && hashPrev.compare(tmp->getHash()) == 0
+    // if (tmp != NULL) {cout << "Boolean value : " << (hashPrev.compare(tmp->getHash()) == 0) << endl;}
+
+
+
+    //We check if it's the next block (we won't have to create forks then)
+    if (tmp == NULL || hashPrev.compare(tmp->getHash()) == 0) {
+      //cout << "I add a block in the blockchain n°" << i << endl;
+      addBlock(block, i);
+      //updateMemPool(block, oldBlock);
+      if (i == 0)
+        newBlockToLongestChain = true;
+      foundBlock = true;
+    }
+    //We check if it's the same block than the last
+    else if (tmp != NULL && hash.compare(tmp->getHash()) == 0) {
+      //cout << "I know this block already" << endl;
+      foundBlock = true;
+      break;
+    }
+    //We check if it's part of the chain
+    else {
+      //cout << "Pass 3" << endl;
+      while (tmp != NULL) {
+        tmp = tmp->getPrev();
+
+        if (hashPrev.compare(tmp->getHash()) == 0) {
+          //cout << "I will fork a chain" << endl;
+          createForkChain(tmp);
+          addBlock(block, lastIndex());
+          foundBlock = true;
+        }
+        else if (hash.compare(tmp->getHash()) == 0) {
+          //TODO: send the blockchain back
+          foundBlock = true;
+          break;
+        }
+      }
+
+    }
+  }
+
+  if (!foundBlock) {
+    if (hashPrev.compare(getGenesisHash()) == 0) {
+      //cout << "Created new blockchain from 0" << endl;
+      createForkChain(block);
+    }
+    else {
+      //TODO : Ask for the blockchain
+    }
+  }
+
+  Blockchain* oldBegin = blockchains.at(0);
+  sort(blockchains.begin(), blockchains.end(), compSizes);
+
+  return (oldBegin != blockchains.at(0) || newBlockToLongestChain);
 }

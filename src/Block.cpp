@@ -1,13 +1,29 @@
 #include "../headers/Block.h"
 
 //Constructor
+Block::Block(string hashPrevBlock, int difficulty) {
+  prev = NULL;
+  blockHeader = new BlockHeader(hashPrevBlock, createTarget(difficulty));
+}
+
 Block::Block(string hashPrevBlock, string target) {
   prev = NULL;
   blockHeader = new BlockHeader(hashPrevBlock, target);
 }
 
 Block::Block() {
-  this->id = 0;
+  prev = NULL;
+}
+
+string Block::createTarget(int difficulty) {
+  string bits = "0696f4";
+
+  int decimalExponent = 64 - 6 - difficulty;
+  stringstream ss;
+  ss << hex << decimalExponent;
+  string exponent ( ss.str() );
+
+  return exponent + bits;
 }
 
 //Some getters and setters
@@ -21,6 +37,10 @@ void Block::setPrev(Block* prev) {
 
 BlockHeader* Block::getBlockHeader() {
   return this->blockHeader;
+}
+
+vector<string> Block::getTransactions() {
+  return this->transactions;
 }
 
 string Block::getShortRep() {
