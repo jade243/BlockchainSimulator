@@ -187,6 +187,13 @@ bool Miner::updateMemPool(Block* newBlock, Block* oldBlock) {
 
 }
 
+void Miner::resetBlock(Block* block) {
+  //We push front the transactions of the old block
+  for(auto const& transaction: block->getTransactions()) {
+    memPool.insert(memPool.begin(), transaction);
+  }
+}
+
 string Miner::getGenesisHash() {
   return this->blockchains.at(0)->getGenesisHash();
 }
@@ -195,12 +202,40 @@ static bool compSizes(Blockchain* a, Blockchain* b) {
   return a->getLastID() < b->getLastID();
 }
 
+void Miner::sortBlockchains() {
+  sort(blockchains.begin(), blockchains.end(), compSizes);
+}
+
+int Miner::searchBlock(Block* block) {
+  string hash = block->getHash();
+
+  for (size_t i=0; i<blockchains.size(); i++) {
+
+    Block* tmp = blockchains.at(i)->consultLastBlock();
+
+    while (tmp != NULL) {
+
+      if (hash.compare(tmp->getHash()) == 0) {
+        //We found the block
+        return i;
+      }
+
+      tmp = tmp->getPrev();
+
+    }
+  }
+  return -1;
+}
+
 
 //Methods when receiving a block
-bool Miner::handleReceivedBlock(Block* block) {
+bool Miner::handleReceivedBlock(Block* block, int senderRank) {
   //We extract the hash of the previous block from which the block was built
   string hashPrev = block->getBlockHeader()->getHashPrevBlock();
   string hash = block->getHash();
+
+  int tag = 0;
+  MPI_Request request;
 
   bool newBlockToLongestChain = false;
 
@@ -245,7 +280,10 @@ bool Miner::handleReceivedBlock(Block* block) {
           foundBlock = true;
         }
         else if (hash.compare(tmp->getHash()) == 0) {
-          //TODO: send the blockchain back
+          string s = serializeBlockchain(i);
+          cout << "I've sent a blockchain to " << senderRank << endl;
+          MPI_Isend(&s[0], s.size()+1, MPI_CHAR, senderRank, tag, MPI_COMM_WORLD, &request);
+
           foundBlock = true;
           break;
         }
@@ -260,7 +298,15 @@ bool Miner::handleReceivedBlock(Block* block) {
       createForkChain(block);
     }
     else {
-      //TODO : Ask for the blockchain
+      stringstream stream;
+      stream << 2 << endl;
+
+      string s = block->serialize();
+      stream << s << endl;
+
+      string toSend = stream.str();
+      cout << "I've sent a request for a blockchain to " << senderRank << endl;
+      MPI_Isend(&toSend[0], toSend.size()+1, MPI_CHAR, senderRank, tag, MPI_COMM_WORLD, &request);
     }
   }
 

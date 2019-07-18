@@ -34,6 +34,10 @@ class Miner {
 
     string getGenesisHash();
     bool updateMemPool(Block* newBlock, Block* oldBlock);
+    void resetBlock(Block* block);
+
+    void sortBlockchains();
+    int searchBlock(Block* block);
 
     void createForkChain(Block* head);
     int lastIndex();
@@ -43,7 +47,7 @@ class Miner {
     void deserializeBlockchain(string s);
     string serializeBlockchain(int pos);
 
-    bool handleReceivedBlock(Block* block);
+    bool handleReceivedBlock(Block* block, int senderRank);
     string getHashPrevBlock();
 
     int getMessageType(string s);

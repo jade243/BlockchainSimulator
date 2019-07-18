@@ -95,7 +95,8 @@ void Block::deserialize(string s) {
   stringstream stream;
   stream.str(s);
 
-  if (getString(stream) == "1") {
+  string messageType = getString(stream);
+  if (messageType == "1" || messageType == "2") {
     string version = getString(stream);
     string hashPrevBlock = getString(stream);
     string hashMerkleRoot = getString(stream);
@@ -114,7 +115,7 @@ void Block::deserialize(string s) {
 
     this->computeId();
   } else {
-    cout << "The string doesn't start by 1" << endl;
+    cout << "The string doesn't start by 1 or 2" << endl;
   }
 }
 

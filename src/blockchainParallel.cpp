@@ -174,6 +174,8 @@ int main(int argc, char **argv) {
           int count;
           MPI_Get_count(&status, MPI_CHAR, &count);
 
+          int senderRank = status.MPI_SOURCE;
+
           //and the string itself
           char buf [count];
           MPI_Irecv(&buf, count, MPI_CHAR, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &request);
@@ -183,6 +185,13 @@ int main(int argc, char **argv) {
 
           if (messageType == 0) {       //The miner receives a blockchain
             cout << "I'm proc " << myRank << " and I've received a blockchain" << endl;
+            miner->deserializeBlockchain(s);
+
+            miner->resetBlock(block);
+            finishBlock = true;
+
+            miner->sortBlockchains();
+
           }
           else if (messageType == 1) {  //The miner receives a block
             Block* receivedBlock = new Block();
@@ -190,9 +199,20 @@ int main(int argc, char **argv) {
 
             cout << "I'm proc " << myRank << " and I've received a block " << receivedBlock->getShortRep() << endl;
 
-            finishBlock = miner->handleReceivedBlock(receivedBlock);
+            finishBlock = miner->handleReceivedBlock(receivedBlock, senderRank);
             if (finishBlock)
               miner->updateMemPool(receivedBlock, block);
+          }
+          else if (messageType == 2) {  //The miner receives a request for a blockchain
+            Block* receivedBlock = new Block();
+            receivedBlock->deserialize(s);
+
+            int posBlockchain = miner->searchBlock(receivedBlock);
+            if (posBlockchain != -1) {
+              string s = miner->serializeBlockchain(posBlockchain);
+              cout << "I've sent a blockchain to " << senderRank << endl;
+              MPI_Isend(&s[0], s.size()+1, MPI_CHAR, senderRank, tag, MPI_COMM_WORLD, &request);
+            }
           }
         }
       }
