@@ -24,8 +24,10 @@ If you need indications to run the code locally, please refer to the section at 
 	- [x] Serialize blocks to send them with MPI
   	- [x] Serialize blockchains to send them with MPI
   	- [x] Add the possibility to fork chains
-	- [ ] Implement the algorithm for the miners to broadcast mined blocks
-	- [ ] Improve the logs
+	- [x] Implement the algorithm for the miners to broadcast mined blocks
+	- [x] Improve the logs
+  - [ ] Write Matlab script to analyze the new logs
+  - [ ] Improve network structure
 - [x] Version 1
 	- [x] Modify the code so it's compiled and ran with MPI
 	- [x] Synchronize the procs so they start with the same transactions
