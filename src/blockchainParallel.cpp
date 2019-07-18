@@ -148,6 +148,12 @@ int main(int argc, char **argv) {
           //They add the block to their longest blockchain
           miner->addBlock(block);
 
+          //We write the logs
+          time = Clock::now();
+          stream << "[" << getStrTime(time) << "]" << " ";
+          stream << "Block mined in ";
+          stream << chrono::duration_cast<chrono::milliseconds> (time-start).count() << " milliseconds." << endl;
+
           //They broadcast the block to all the network
           string s = block->serialize();
           cout << "I'm proc " << myRank << " and I've sent a block " << block->getShortRep() << endl;
@@ -219,10 +225,10 @@ int main(int argc, char **argv) {
 
     }
 
-    miner->printAllInfos(myRank);
-
 
     //===== There, all nodes have finished =====
+    MPI_Barrier(MPI_COMM_WORLD);
+    miner->printAllInfos(myRank);
     MPI_Barrier(MPI_COMM_WORLD);
     if (myRank == 0) {
       cout << "Mining stage done !" << endl;
