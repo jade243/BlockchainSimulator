@@ -32,6 +32,9 @@ class Miner {
     bool isEmpty();
     void clearBlockchains();
 
+    size_t getNbChains();
+    Blockchain* getBlockchain(int pos);
+
     string getGenesisHash();
     bool updateMemPool(Block* newBlock, Block* oldBlock);
     void resetBlock(Block* block);

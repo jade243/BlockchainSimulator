@@ -59,6 +59,7 @@ int main(int argc, char **argv) {
   //To measure the time
   chrono::time_point<std::chrono::system_clock> start, time;
   start = Clock::now(); //We start a chronometer
+
   //To write infos in the file
   stringstream stream;
 
@@ -151,7 +152,7 @@ int main(int argc, char **argv) {
           //We write the logs
           time = Clock::now();
           stream << "[" << getStrTime(time) << "]" << " ";
-          stream << "Block mined in ";
+          stream << "Block " << block->getShortRep() << " mined in ";
           stream << chrono::duration_cast<chrono::milliseconds> (time-start).count() << " milliseconds." << endl;
 
           //They broadcast the block to all the network
@@ -227,6 +228,7 @@ int main(int argc, char **argv) {
 
 
     //===== There, all nodes have finished =====
+
     MPI_Barrier(MPI_COMM_WORLD);
     miner->printAllInfos(myRank);
     MPI_Barrier(MPI_COMM_WORLD);
@@ -266,6 +268,32 @@ int main(int argc, char **argv) {
     //Writing personal data
     fileName << "_" << myRank << ".txt";
     file.open (fileName.str());
+
+    stream << "[nbChains] " << miner->getNbChains() << endl;
+
+    stringstream streamTmp;
+    Blockchain* blockchain;
+    Block* tmp;
+
+    for (size_t i=0; i<miner->getNbChains(); i++) {
+      blockchain = miner->getBlockchain(i);
+      tmp = blockchain->consultLastBlock();
+
+      stream << "[" << i << "] ";
+      if (tmp != NULL) {
+        stream << tmp->getShortRep() << endl;
+        tmp = tmp->getPrev();
+      }
+      else
+        stream << "NULL" << endl;
+
+      while (tmp != NULL) {
+        stream << tmp->getShortRep() << endl;
+        tmp = tmp->getPrev();
+      }
+    }
+
+
     file << stream.rdbuf();
     file.close();
 

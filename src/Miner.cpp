@@ -54,6 +54,14 @@ string Miner::getHashPrevBlock() {
   return this->blockchains.at(0)->getHashPrevBlock();
 }
 
+size_t Miner::getNbChains() {
+  return this->blockchains.size();
+}
+
+Blockchain* Miner::getBlockchain(int pos) {
+  return this->blockchains.at(pos);
+}
+
 //To mine a block
 bool Miner::mine(Block* block) {
 
