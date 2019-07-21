@@ -7,24 +7,12 @@
 %%
 
 % First, let's analyse the logs folder and check the files' names.
-list = dir('../logs/*.txt');
-fileList = {};
-
-for i = 1 : size(list, 1)
- 
-  fileList{i} = list(i).name;
- 
-end
-
-[res, prefix] = check_file_name(fileList);
-
-if (res == false)
-  disp('Something wrong with the files');
-  exit(-1);
-end
+[prefix, fileList] = check_logs_filenames();
 
 %% Now, we can extract the data from the files
 
+fileList
+prefix
 times = [];
 ids = [];
 for i = 1 : length(fileList)
@@ -44,6 +32,8 @@ for i = 1 : length(fileList)
     % We get the times where each block where mined
     times = [times; read_infos_from_file(strcat('../logs/', fileName))];
     ids = [ids; id];
+    
+
   end
   
 end
