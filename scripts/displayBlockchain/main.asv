@@ -143,13 +143,10 @@ annotation(gcf,'Textbox','String',TString,'Interpreter','Tex','FontName',FixedWi
             'Units','Normalized', 'Position',[0 0 1 1], 'FontSize', 15, ...
             'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle');
 
-saveas(gcf,'rewards.png')
-
 % We display the evolution of the longest blockchain
 square_size = 1000;
 square_y = 0;
-margin_up = 0.2;
-margin_low = 220;
+margin = 0.2;
 colors = {[0 0.4470 0.7410], [0.8500 0.3250 0.0980], [0.9290 0.6940 0.1250]};
 
 figure
@@ -158,9 +155,9 @@ for i = 1 : size(longest_chain, 2)
     rectangle('Position', [times(i) square_y square_size square_size], ...
         'FaceColor', colors{mod(i, size(colors, 2)+1)}, ...
         'EdgeColor', 'k', 'LineWidth', 2);
-    text(times(i), square_y+(1+margin_up)*square_size, longest_chain{i}, ...
+    text(times(i), square_y+(1+margin)*square_size, longest_chain{i}, ...
         'HorizontalAlignment', 'left')
-    text(times(i), square_y-margin_low, names{miners(i)});
+    text(times(i), square_y - margin, names
 end
 axis equal
 xlim([times(1)-square_size times(end)+2*square_size])
@@ -169,8 +166,6 @@ xlabel('Time in milliseconds')
 title(sprintf('Mining of %d transactions by %d miners', nb_transactions, nb_proc));
 set(gca,'YTick',[])
 hold off
-
-saveas(gcf,'timeline.png')
 
 
 

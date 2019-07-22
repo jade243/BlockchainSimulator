@@ -1,6 +1,6 @@
-function prefix = check_logs_filenames() 
-  list = dir('../logs/*.txt');
-  fileList = {};
+function [prefix, fileList] = check_logs_filenames() 
+  list = dir('../../logs/*.txt');
+  fileList = cell(size(list, 1), 1);
 
   for i = 1 : size(list, 1)
    
@@ -10,7 +10,7 @@ function prefix = check_logs_filenames()
 
   prefix = '';
   res = false;
-  if (length(fileList) ~= 0)
+  if (~isempty(fileList))
     
     % Get the prefix of the files
     prefix = '';
@@ -37,7 +37,7 @@ function prefix = check_logs_filenames()
         gen = true;
       end
       
-      if (!strcmp(prefix, fileName(1:length(prefix))))
+      if (~strcmp(prefix, fileName(1:length(prefix))))
         same_prefix = false;
       end
     end
