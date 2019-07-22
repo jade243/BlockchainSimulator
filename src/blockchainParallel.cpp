@@ -3,6 +3,7 @@
 #include <chrono>
 #include <ctime>
 #include <string>
+#include <unistd.h>
 #include "TransactionsGenerator.cpp"
 #include "Miner.cpp"
 #include "tests.cpp"
@@ -15,6 +16,24 @@ string getStrTime(chrono::time_point<Clock> chrono) {
   string str(ctime(&time_tmp));
   str.pop_back();
   return str;
+}
+
+uint64_t rdtsc(){
+    unsigned int lo,hi;
+    __asm__ __volatile__ ("rdtsc" : "=a" (lo), "=d" (hi));
+    return ((uint64_t)hi << 32) | lo;
+}
+
+void displayFrequency(double frequency)
+{
+  if (1e9<frequency)
+    cout << frequency/1e9 << " GHz" << endl;
+  else if (1e6<frequency)
+    cout << frequency/1e6 << "MHz" << endl;
+  else if (1e3<frequency)
+    cout << frequency/1e3 << "KHz" << endl;
+  else
+    cout << frequency << "Hz" << endl;
 }
 
 int main(int argc, char **argv) {
@@ -34,7 +53,6 @@ int main(int argc, char **argv) {
     exit(-1);
   }
 
-  int nbBlocks = (int)(nbTransactions/nbTransactionsByBlock);
   int nbUsers = 10;
   int difficulty = 3;
 
@@ -62,6 +80,19 @@ int main(int argc, char **argv) {
 
   //To write infos in the file
   stringstream stream;
+
+  //===== All procs will compute the clock rate =====
+  double t1 = MPI_Wtime();
+  uint64_t tick = rdtsc();
+  while (MPI_Wtime() - t1 < 1);
+  double frequency = rdtsc() - tick;
+  //displayFrequency(frequency);
+
+  stream << "[freq] " << frequency/1e9 << endl;
+
+
+  MPI_Barrier(MPI_COMM_WORLD);
+
 
   //===== Proc 0 will prepare the data for all nodes
   if (myRank == 0) {
@@ -148,8 +179,8 @@ int main(int argc, char **argv) {
           //We write the logs
           time = Clock::now();
           stream << "[" << getStrTime(time) << "]" << " ";
-          stream << "Block " << block->getShortRep() << " mined in ";
-          stream << chrono::duration_cast<chrono::milliseconds> (time-start).count() << " milliseconds." << endl;
+          stream << block->getShortRep() << " ";
+          stream << chrono::duration_cast<chrono::milliseconds> (time-start).count() << endl;
 
           //They broadcast the block to all the network
           string s = block->serialize();
@@ -250,7 +281,6 @@ int main(int argc, char **argv) {
       //General infos
       stringstream streamGeneral;
       streamGeneral << "[nbTransactions] " << nbTransactions << endl;
-      streamGeneral << "[nbBlocks] " << nbBlocks << endl;
       streamGeneral << "[nbProc] " << nProc << endl;
 
       //Writing them in a file
