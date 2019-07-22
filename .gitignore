@@ -5,3 +5,13 @@ blockchainSequential
 blockchainParallel
 
 *.txt
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.tcp
+*.toc
+*.tps
