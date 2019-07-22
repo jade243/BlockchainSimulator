@@ -96,10 +96,6 @@ int main(int argc, char **argv) {
   if (myRank == 0) {
     cout << "Initialization stage done ! " << endl;
     cout << "Mining stage in process..." << endl;
-    time = Clock::now();
-    stream << "[" << getStrTime(time) << "]" << " ";
-    stream << "Initialization done in ";
-    stream << chrono::duration_cast<chrono::milliseconds> (time-start).count() << " milliseconds." << endl;
   }
 
   MPI_Barrier(MPI_COMM_WORLD);
