@@ -1,0 +1,36 @@
+\section{Second pre-image and collision}
+
+We've seen in the previous section vulnerabilities linked to pre-images. Let's have a look to second pre-images and collisions.
+
+  \subsection{Attacks on blocks}
+
+    \paragraph{Second pre-image}
+
+Let's recall the theory about second pre-images : for a specific hash given by a specific input, a second pre-image oracle allow us to find another input giving the same hash.
+
+In our context, one could want to replace a block by a new block with the same hash to maintain the blockchain valid, this way one could completely modify the blockchain.
+
+However, this is concretely infeasible because more than just the hash, the new block has to be valid in terms of transactions. This means the transactions have correct inputs and correct signatures, the probability that the new block respects these constraints is almost zero. \newline
+
+    \paragraph{Collision}
+
+For collisions, the idea would be to create several blocks with the same hash and to insert them in the network. This would allow an attacker to be able to fork the chain and possibly double-spend or steal coins.
+However, following the same remark we did for second pre-images, the probability to create valid blocks is negligible. \newline
+
+To conclude, collisions and second pre-images are irrelevant to break mining.
+
+  \subsection{Merkle roots}
+
+As recall the hash function $H_M$ is also in merkle trees, then one could alter already mined blocks by changing transactions but with the same merkle root.
+
+    \paragraph{Blocks inside the blockchain}
+
+This idea would be to change the transactions in a block by getting a merkle root with the same hash. As we expose before, the probability of getting valid transactions is very low. So the nodes will reject the modified block.
+
+    \paragraph{New added blocks}
+
+However, the situation is different if the adversary focuses on the last block. The attacker can create a new block with different transactions but the same merkle root. Even if, this new created block is invalid, the attacker can send it in the network and this may cause the nodes to reject both blocks or even to accept the invalid block.
+
+This attack was done in July 2015 (\cite{mining_attack}), nodes were accepting invalid blocks and then, validating wrong transactions. Nowadays, a new version of the protocol has been released and these problems are solved. \newline
+
+The adversary can also double-spend coins by creating a new block with conflicting transactions according to the valid block using a collision or second pre-image oracle. Then, he can transmit both blocks in the network, this will fork the blockchain and may fool the vendor.

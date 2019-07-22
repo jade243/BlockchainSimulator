@@ -1,0 +1,138 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% HEADER
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper,twoside,10pt]{report}
+
+%% Language %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern} %Type1-font for non-english texts and characters
+
+
+%% Packages for Graphics & Figures %%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx} %%For loading graphic files
+\usepackage{svg} %%To use svg pictures
+\usepackage{wrapfig} %%To integrate images in paragraph
+\usepackage{subfig} %%Subfigures inside a figure
+%\usepackage{pst-all} %%PSTricks - not useable with pdfLaTeX
+
+
+%% Math Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+%\usepackage[squaren,Gray]{SIunits} %To write units in formulas
+
+%% Other Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{a4wide} %%Smaller margins = more text per page.
+%\usepackage{fancyhdr} %%Fancy headings
+%\usepackage{longtable} %%For tables, that exceed one page
+\usepackage{xcolor} %To enable colors
+
+\usepackage{quoting,xparse} %To write quotes
+\usepackage{caption} %To setup style in captions
+\usepackage{makecell} %To setup cells in arrays
+
+\NewDocumentCommand{\bywhom}{m}{% the Bourbaki trick
+  {\nobreak\hfill\penalty50\hskip1em\null\nobreak
+   \hfill\mbox{\normalfont(#1)}%
+   \parfillskip=0pt \finalhyphendemerits=0 \par}%
+}
+
+\NewDocumentEnvironment{pquotation}{m}
+  {\begin{quoting}[
+     indentfirst=true,
+     leftmargin=\parindent,
+     rightmargin=\parindent]\itshape}
+  {\bywhom{#1}\end{quoting}}
+
+
+\usepackage{listings}
+\lstset{language=C++,
+basicstyle=\ttfamily,
+keywordstyle=\color{blue}\ttfamily,
+stringstyle=\color{red}\ttfamily,
+commentstyle=\color{green}\ttfamily,
+morecomment=[l][\color{magenta}]{\#}
+}
+
+
+%% Hyperlinks %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black, % Couleur des liens internes
+    urlcolor=blue  } % Couleur des url
+
+%% Somevisual parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\parindent}{0pt}
+\pagestyle{plain} %No headings for the first pages.
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\hbadness=99999
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+
+%% Title page
+\input{titlepage}
+\thispagestyle{empty}
+
+%% Contents
+\tableofcontents %Table of contents
+\thispagestyle{empty}
+\clearpage
+
+
+
+\chapter{Introduction}
+\setcounter{page}{1}
+
+  \input{Chapters/Intro/abstract}
+
+  \input{Chapters/Intro/blockchainStructure}
+
+  \input{Chapters/Intro/mining}
+
+%\chapter{Blockchain simulation}
+
+%  \input{Chapters/Simulation/blockHeader}
+
+%  \input{Chapters/Simulation/blockchain}
+
+\chapter{Breaking mining if SHA256 is broken}
+
+	\input{Chapters/SHA256/fixedMerkleRoot}
+
+  \input{Chapters/SHA256/variableMerkleRoot}
+
+  \input{Chapters/SHA256/boundedOracle}
+
+  \input{Chapters/SHA256/secondPreImageCollision}
+
+  \input{Chapters/SHA256/conclusion}
+
+\chapter{Attacks using mining weaknesses}
+
+  \input{Chapters/Attacks/doubleSpending.tex}
+
+  \input{Chapters/Attacks/selfishMining.tex}
+
+%\chapter{Quantum attacks on mining}
+
+\appendix
+\input{Chapters/SHA256/targetAppendix}
+\input{Chapters/Attacks/revenueAppendix}
+
+\nocite{*}
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,biblio}
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\end{document}

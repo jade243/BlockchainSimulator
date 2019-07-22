@@ -1,0 +1,26 @@
+\chapter{Complements about the target} \label{appendixTarget}
+
+What does it imply to consider that the hash starts with d zeros ? \newline
+
+To simplify the analysis, we can assume that the condition of having an hash lower than the target is equivalent to having starting by d zeros, where d is 256 - exponent\_length. \newline
+
+The "real" condition is harder to fulfill so how much work does it require if we only fulfill the second condition ?
+Let's suppose we find a hash starting with d zeros : \newline
+
+$0 ... 0 a_1 a_2 a_3 a_4 a_5 a_6 0 ... 0$ \newline
+
+and we have the following target : \newline
+
+$0 ... 0 c_1 c_2 c_3 c_4 c_5 c_6 0 ... 0$ \newline
+
+There are 3 possibilities : \newline
+
+\begin{itemize}
+  \item $a_1 < c_1$ : then the condition is fulfilled.
+  \item $a_1 = c_1$ : we look at the next the bit and we are in the same situation for $c_2$, same for $c_3$, ..., $c_5$.
+  \item $a_1 > c_1$ : we need a more bit of effort to satisfy the condition.
+\end{itemize}
+
+For $a_6$, if $a_6 = c_6$, we also need one more bit of effort to satisfy the condition.
+
+Finally, whatever the situation, we need only one more bit of effort.

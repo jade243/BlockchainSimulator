@@ -1,0 +1,46 @@
+\chapter{Explanations on the revenues} \label{appendixRevenue}
+
+In the chapter about selfish mining, we've calculated the revenues of the honest and selfish miners. \newline
+
+\begin{table}[h]
+  \centering
+
+  \begin{tabular}{c}
+    $r\_honest =  p_0 . (1 - \alpha) . 1 + p_{0'} . \gamma . (1 - \alpha) . 1 + p_{0'} . (1 - \gamma) (1 - \alpha) . 2$ \\
+    \\
+    $r\_selfish =  p_{0'} . \gamma . (1 - \alpha) . 1 + p_{0'} . \alpha . 2 + p_2 . (1 - \alpha) . 2 + P[i > 2] . (1 - \alpha) . 1$
+  \end{tabular}
+  \caption{Revenue won by the honest and selfish miners according to $\alpha$ and $\gamma$}
+\end{table}
+\medskip
+
+Here is more explanations about these formulas : \newline
+
+\begin{table}[h]
+
+  \centering
+
+  \begin{tabular}{l|l}
+    $p_0 . (1 - \alpha) . 1$ & The honest miners find a block on the actual chain, they win 1 reward.\\
+    \\
+    $p_{0'} . \gamma . (1 - \alpha) . 1$ & \makecell[l]{The selfish and honest miners broadcast a block at the same time, then the honest miners \\ find the next block after the selfish miners' one, the honest and selfish miners win both 1 reward.}\\
+    \\
+    $p_{0'} . (1 - \gamma) (1 - \alpha) . 2$ & \makecell[l]{The selfish and honest miners broadcast a block at the same time, then the honest miners \\ find the next block after their own one, so they win 2 rewards.}\\
+  \end{tabular}
+
+  \vspace{1cm}
+
+  \begin{tabular}{l|l}
+    $p_{0'} . \gamma . (1 - \alpha) . 1$ & \makecell[l]{The selfish and honest miners broadcast a block at the same time, then the honest miners \\ find the next block after the selfish miners' one, the honest and selfish miners win both 1 reward.}\\
+    \\
+    $p_{0'} . \alpha . 2$ & \makecell[l]{The selfish and honest miners have both found a block, but the selfish miners find their \\ next block first, they publish both blocks and they win 2 rewards.}\\
+    \\
+    $p_2 . (1 - \alpha) . 2$ & \makecell[l]{The selfish miners had a lead of two blocks but the honest miners find one, so the selfish \\ miners publish their two blocks and they win 2 rewards.}\\
+    \\
+    $P[i > 2] . (1 - \alpha) . 1$ & Each time the selfish miners increase their lead above 2 blocks, they win 1 reward.\\
+  \end{tabular}
+
+
+  \caption{Explanations for the revenue of honest miners and selfish miners}
+
+\end{table}

@@ -1,0 +1,66 @@
+\section{Mining in blockchain} \label{mining}
+
+In this section, we give a general view of the mining process and the math involved.
+
+  \subsection{Proof of work}
+
+As we've seen before, blockchains lie on networks. Some nodes in these networks are miners, their role is to create a block of transaction and to mine it in order to add it to the network. \newline
+
+How do they mine it ? \newline
+
+They hash the block header with a specific function : $H_M(x) = SHA256(SHA256(x))$.
+
+This is an easy and fast operation for miners but they need to fulfil a condition : the resulting hash has to be under a target value.
+
+  \paragraph{The target} \label{target}
+
+In the block header, this target is described by a field, which is 4 bytes long.
+
+Let's take an example : if the target field is : \newline
+
+Target : 0x12\textcolor{orange}{07e540} \newline
+
+12 is the exponent, it's an hexadecimal number and represents 18 in base 10. This means, the target will be 18 bytes long.
+
+\textcolor{orange}{07e540} is the coefficient. The exponent gives us a long series of zeros and we replace the 3 first bytes by the coefficient. \newline
+
+This will give us : \textcolor{orange}{07e540}000000000000000000000000000000 . \newline
+
+The miners have to find an hash lower than the target value. We can see this condition from another angle, the hash will be 256 bits (64 bytes) long but the target is shorter. So there is a difference of bits, let's note d, this means that the hash will have to start with at least d zeros to fit the condition. \newline
+
+The target is not chosen randomly, it is set so a block will take about 10 minutes to be mined. This way, the number of blocks added in the network is controlled and it let enough time for the mined blocks to be broadcast in the network.
+
+The difficulty is updated about every two weeks, every 2016 blocks exactly. It depends on the expected time (2016 x 10 minutes) and the actual time.
+
+  \paragraph{The nonce}
+
+The last question remaining is how do miners affect the hash. They use another field of the block header, the nonce. This is the only field the miner can change, so the nonce is simply a random number and the miner's goal is to find the right random number which gives an hash lower than the target. \newline
+
+This describes an algorithm called the proof-of-work.
+
+  \paragraph{The rewards}
+
+Then, we have a working protocol for mining but one can wonder why nodes will be willing to work for the blockchain.
+
+It's quite simple actually, once a node has mined a block, he receives a reward (in Bitcoin if he works for Bitcoin blockchain).This is a way to motivate miners to work according to the rules for the blockchain. \newline
+
+Miners have also another way of winning money, the payers can add a fee to their transaction. This transaction fee will be taken by the miner which confirm the transaction in a mined block.
+
+As we've seen before, miners have a Mempool and they will prioritize the transactions according to the fees they can obtain. This is a way for payers to speed up transactions in the network which is often highly congested.
+
+
+  \subsection{Hash functions}
+
+In this paper, we'll analyze the potential consequences if the hashing function for mining is broken. So let's recall some properties about hashing functions. \newline
+
+The function used by mining is $H_M(x) = SHA256(SHA256(x))$.
+
+Essentially, we can describe hash functions as deterministic functions, easy and fast to compute, whose output completely changes if the input changes and knowing the output gives no information at all on the input.
+
+More precisely, hash functions, like SHA256, hold three properties : \newline
+
+\begin{enumerate}
+  \item Pre-image resistance : knowing $y_1$, it's difficult to find $x_1$ such that $h(x_1) = y_1$.
+  \item Second pre-image resistance : knowing $x_1$, it's difficult to find $x_2$ such that $h(x_1) = h(x_2)$.
+  \item Collision resistance : it's difficult to find $x_1$ and $x_2$ such that $h(x_1) = h(x_2)$.
+\end{enumerate}

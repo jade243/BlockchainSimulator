@@ -1,0 +1,18 @@
+\section{Block header implementation}
+\begin{lstlisting}
+
+class BlockHeader {
+
+
+  private:
+
+    //Attributes
+
+    string version;           //Version of the block
+    string hashPrevBlock;     //hash of the previous block
+    string hashMerkleRoot;    //merkle root
+    string time;              //time
+    string target;            //expected target for the hash
+    string nonce;             //random number
+
+\end{lstlisting}
