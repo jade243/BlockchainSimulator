@@ -27,6 +27,7 @@ If you need indications to run the code locally, please refer to the section at 
 	- [x] Implement the algorithm for the miners to broadcast mined blocks
 	- [x] Improve the logs
   - [x] Write Matlab script to analyze the new logs
+  - [x] Compute the clock rate of each proc
   - [ ] Improve network structure
 - [x] Version 1
 	- [x] Modify the code so it's compiled and ran with MPI
