@@ -56,8 +56,17 @@ void Block::setId(int id) {
 }
 
 void Block::computeId() {
-  //We extract the 10 first bytes of the bloch header's hash
-  this->shortRep = blockHeader->hashOperation().substr(0, 10);
+  //We extract the 10 first bytes after the zeros of the bloch header's hash
+  string hash = blockHeader->hashOperation();
+  // Count trailing zeros
+  int i = 0;
+  while (hash[i] == '0')
+     i++;
+
+  // The erase function removes i characters
+  // from given index (0 here)
+  hash.erase(0, i);
+  this->shortRep = hash.substr(0, 10);
 }
 
 string Block::getHash() {
