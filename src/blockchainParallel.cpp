@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
   int tag = 0;
 
   //To measure the time
-  chrono::time_point<std::chrono::system_clock> start, time;
+  chrono::time_point<std::chrono::system_clock> start, time, end;
   start = Clock::now(); //We start a chronometer
 
   //To write infos in the file
@@ -282,6 +282,11 @@ int main(int argc, char **argv) {
       stringstream streamGeneral;
       streamGeneral << "[nbTransactions] " << nbTransactions << endl;
       streamGeneral << "[nbProc] " << nProc << endl;
+      streamGeneral << "[difficulty] " << difficulty << endl;
+
+      end = Clock::now();
+      streamGeneral << "[finalTime] ";
+      streamGeneral << chrono::duration_cast<chrono::milliseconds> (end-start).count() << endl;
 
       //Writing them in a file
       stringstream fileName2;
@@ -325,10 +330,6 @@ int main(int argc, char **argv) {
 
 
   }
-
-
-
-
 
   MPI_Finalize();
 
