@@ -19,7 +19,7 @@ If you need indications to run the code locally, please refer to the section at 
 
 - [x] Selfish mining
   	- [x] Simulate the finite state machine
-- [ ] Version 2
+- [x] Version 2
 	- [x] Broadcast transactions with MPI, without using files
 	- [x] Serialize blocks to send them with MPI
   	- [x] Serialize blockchains to send them with MPI
