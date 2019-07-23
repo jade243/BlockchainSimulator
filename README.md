@@ -56,22 +56,74 @@ When receiving a block :
 ```
 Miner i receives a block from miner j
 
-if (the previous hash block matches the last block of the chain)
-    the miner adds it at the end of his chain and starts mining on it
+For all his chains :
 
-else if (the block is the last one of the chain)
-    the miner forgets it and mine on his last block
+    if (the previous hash block matches the last block of the chain)
+        the miner adds it at the end of his chain and starts mining on it
 
-else if (the block appears in the chain but not in the last position)
-    the miner creates a forked chain and works on the first longest he received.
+    else if (the block is the last one of the chain)
+        the miner forgets it and mine on his last block
 
-else if (the block doesn't appear in the chain but the previous hash block does)
-    the miner creates a forked chain and works on the first longest he received.
+    else if (the block appears in the chain but not in the last position)
+        the miner creates a forked chain and works on the first longest he received.
 
-else (the block and the previous hash block are unknown to the miner)
-    the miner ask for the whole representation of the sender's chain and mines on the longest chain he received.
+    else if (the block doesn't appear in the chain but the previous hash block does)
+        the miner creates a forked chain and works on the first longest he received.
+
+    else (the block and the previous hash block are unknown to the miner)
+        the miner ask for the whole representation of the sender's chain and mines on the longest chain he received.
 ```
 
+We also have an algorithm to handle blockchains communication. At the end, we produce some log files.
+
+* A file with the general infos, for example :
+
+```
+[nbTransactions] 1000
+[nbProc] 20
+[difficulty] 3
+[finalTime] 389194
+```
+
+* A file for each miner, recording at what time they mine blocks and their final stat. For example :
+
+```
+[freq] 2.4225
+[Tue Jul 23 17:40:48 2019] 3fd2146979 26027
+[Tue Jul 23 17:42:48 2019] 34e26d6493 145406
+[Tue Jul 23 17:43:50 2019] 1d73180563 207477
+[Tue Jul 23 17:44:55 2019] 5ed3889ceb 272771
+[Tue Jul 23 17:46:30 2019] 253a7f3b44 367423
+[nbChains] 1
+[0] 47a9270fb6
+253a7f3b44
+4eee424737
+36845c7579
+67611329fc
+...
+```
+
+* A file for debugging purpose recording steps of the execution
+
+```
+Initialization stage done !
+Mining stage in process...
+I'm proc 0 and I've sent a block 4285e9a5cd
+I'm proc 4 and I've received a block 4285e9a5cd
+I'm proc 9 and I've received a block 4285e9a5cd
+I'm proc 12 and I've received a block 4285e9a5cd
+I'm proc 16 and I've received a block 4285e9a5cd
+I'm proc 1 and I've received a block 4285e9a5cd
+I'm proc 2 and I've received a block 4285e9a5cd
+
+...
+
+The miner 12 has 1 forks.
+Blockchain n°0
+There are 100 blocks in the chain and the first one is 1bba17871c
+```
+
+Then, we analyze these logs with a Matlab script (see scripts/displayBlockchain).
 
 ## Version 1
 
