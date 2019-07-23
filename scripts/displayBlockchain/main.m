@@ -49,6 +49,7 @@ for i = 1 : length(fileList)
     
     nb_blocks_mined = 0;
     blocks_mined = {};
+    freq = 0;
     
     if (~strcmp(filename, strcat(prefix, '.txt')))
         % We extract the results produced by each proc during the execution 
@@ -59,6 +60,9 @@ for i = 1 : length(fileList)
            line = fgetl(file);
            [tag, index] = get_tag(line);
            
+           if (strcmp(tag, 'freq')) 
+               freq = str2double(line(index+2 : end));
+           else
            if (strcmp(tag, 'nbChains'))
                nb_chains = str2double(line(index+2 : end));
                
@@ -92,8 +96,10 @@ for i = 1 : length(fileList)
                blocks_mined{end+1} = block;
            end
            
+           end
         end
         
+        proc.freq = freq;
         proc.nb_blocks_mined = nb_blocks_mined;
         proc.blocks_mined = blocks_mined;
         proc.nb_chains = nb_chains;
@@ -116,9 +122,9 @@ clearvars -except final_time nb_proc nb_transactions procs names
 
 %% We've extracted all data from the logs
 
-var_names = {'Name', 'Rewards', 'Forks'};
+var_names = {'Name', 'Freq', 'Rewards', 'Forks'};
 f = struct2cell(cell2mat(procs));
-T = table(names, cell2mat(f(1, :))', cell2mat(f(3, :))', 'VariableNames', var_names);
+T = table(names, cell2mat(f(1, :))', cell2mat(f(2, :))', cell2mat(f(4, :))', 'VariableNames', var_names);
 
 longest_chain = get_longest_chain(procs);
 [miners, times] = find_miners(longest_chain, procs);
@@ -140,7 +146,7 @@ TString = strrep(TString,'_','\_');
 FixedWidth = get(0,'FixedWidthFontName');
 % Output the table using the annotation command.
 annotation(gcf,'Textbox','String',TString,'Interpreter','Tex','FontName',FixedWidth, ...
-            'Units','Normalized', 'Position',[0 0 1 1], 'FontSize', 15, ...
+            'Units','Normalized', 'Position',[0 0 1 1], 'FontSize', 10, ...
             'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle');
 
 saveas(gcf,'rewards.png')
@@ -152,25 +158,30 @@ margin_up = 0.2;
 margin_low = 220;
 colors = {[0 0.4470 0.7410], [0.8500 0.3250 0.0980], [0.9290 0.6940 0.1250]};
 
-figure
-hold on
-for i = 1 : size(longest_chain, 2)
-    rectangle('Position', [times(i) square_y square_size square_size], ...
-        'FaceColor', colors{mod(i, size(colors, 2)+1)}, ...
-        'EdgeColor', 'k', 'LineWidth', 2);
-    text(times(i), square_y+(1+margin_up)*square_size, longest_chain{i}, ...
-        'HorizontalAlignment', 'left')
-    text(times(i), square_y-margin_low, names{miners(i)});
-end
-axis equal
-xlim([times(1)-square_size times(end)+2*square_size])
-ylim([square_y-square_size square_y+2*square_size])
-xlabel('Time in milliseconds')
-title(sprintf('Mining of %d transactions by %d miners', nb_transactions, nb_proc));
-set(gca,'YTick',[])
-hold off
+nb_blocks = 10;
 
-saveas(gcf,'timeline.png')
+for j = 1 : size(longest_chain, 2) / nb_blocks
+    figure
+    hold on
+    for i = 1+(j-1)*nb_blocks : nb_blocks+(j-1)*nb_blocks
+        rectangle('Position', [times(i) square_y square_size square_size], ...
+            'FaceColor', colors{mod(i, size(colors, 2))+1}, ...
+            'EdgeColor', 'k', 'LineWidth', 2);
+        legend_str = [int2str(i) '. ' longest_chain{i} ' by ' names{miners(i)}];
+        line(NaN,NaN,'LineWidth',0.5,'LineStyle','none','Color',[0 0 0], 'DisplayName', legend_str);
+    end
+    legend('show')
+    axis equal
+    xlim([times(1+(j-1)*nb_blocks)-square_size times(i)+2*square_size])
+    ylim([square_y-square_size square_y+20*square_size])
+    xlabel('Time in milliseconds')
+    title(sprintf('Mining of %d transactions by %d miners', nb_transactions, nb_proc));
+    set(gca,'YTick',[])
+    hold off
+
+    saveas(gcf,strcat('timeline_', int2str(j), '.png'))
+end
+
 
 
 

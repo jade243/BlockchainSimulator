@@ -4,8 +4,8 @@ function [miners, times] = find_miners(longest_chain, procs)
     blocks_tmp = {};
     
     f = struct2cell(cell2mat(procs));
-    for i = 1 : size(f(2, :), 2)
-        cell = f(2, i);
+    for i = 1 : size(f(3, :), 2)
+        cell = f(3, i);
         cell = cell{1};
         for structure = cell
            miners_tmp = [miners_tmp i];
