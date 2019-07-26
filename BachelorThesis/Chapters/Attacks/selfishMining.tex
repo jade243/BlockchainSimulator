@@ -22,7 +22,7 @@ Let's see in details how this strategy works, there are four important cases : \
 \end{itemize}
 \medskip
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 
 \subfloat[Case 1]{
@@ -35,7 +35,7 @@ Let's see in details how this strategy works, there are four important cases : \
 \end{figure}
 \medskip
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 
 \subfloat[Case 3]{
@@ -53,7 +53,7 @@ As we've just seen, this strategy is based on the fact that the selfish miners s
 
 As describe in \cite{majority_not_enough}, we can represent the selfish mining algorithm with a finite state machine. \newline
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=10cm]{Figures/finiteState}
 \caption{Selfish mining finite state machine}
@@ -66,7 +66,7 @@ We can compute the probabilities of this state machine, we note $p_i$ the probab
 
 We can find more explanations about the formulas in this appendix \ref{appendixRevenue}. \newline
 
-\begin{table}[h]
+\begin{table}[ht]
   \centering
 
   \begin{tabular}{c}
@@ -81,7 +81,7 @@ We can find more explanations about the formulas in this appendix \ref{appendixR
 
 We can implement this finite state machine and try some values of $\alpha$ and $\gamma$.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=12cm]{Figures/selfishGraph}
 \caption{Rewards according to different $\alpha$ and $\gamma$}
@@ -90,7 +90,7 @@ We can implement this finite state machine and try some values of $\alpha$ and $
 
 We see that $\gamma$ and $\alpha$ are linked because the more $\gamma$ increases the more the pool size $\alpha$ needs to increase to win the same reward. Let's try several values of $\gamma$ with the hash rates of the four largest pools in Bitcoin network (see \cite{hashrate_pools}).
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 
 \subfloat{
@@ -104,7 +104,7 @@ We see that $\gamma$ and $\alpha$ are linked because the more $\gamma$ increases
 } \newline
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \subfloat{
   \includegraphics[width=12cm]{Figures/largestPools1}
@@ -117,7 +117,7 @@ We can see that the pools will be able to win more if they can propagate their b
 
 Now, we need to know if it's worth the effort against the honest mining, to do so we can analyze the link between $\alpha$ and $\gamma$ in the formulas for the revenues (Table \ref{revenueFormulas}) as it was done in \cite{majority_not_enough}. \newline
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=10cm]{Figures/poolRevenue}
 \caption{Revenue of the selfish miners for different values of $\alpha$ and $\gamma$}

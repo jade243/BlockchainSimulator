@@ -22,6 +22,7 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amsfonts}
+\usepackage{physics}
 %\usepackage[squaren,Gray]{SIunits} %To write units in formulas
 
 %% Other Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -71,6 +72,7 @@ morecomment=[l][\color{magenta}]{\#}
 \pagestyle{plain} %No headings for the first pages.
 \usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
 \hbadness=99999
+\hfuzz=55pt
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% DOCUMENT
@@ -124,7 +126,11 @@ morecomment=[l][\color{magenta}]{\#}
 
   \input{Chapters/Attacks/selfishMining.tex}
 
-%\chapter{Quantum attacks on mining}
+\chapter{Quantum computing and blockchains' security ?}
+
+  \input{Chapters/Quantum/IntroQuantum.tex}
+
+  \input{Chapters/Quantum/quantumHack.tex}
 
 \appendix
 \input{Chapters/SHA256/targetAppendix}
