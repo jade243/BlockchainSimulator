@@ -1,0 +1,33 @@
+\section{How much are we close to build a quantum computer ?}
+
+We've just seen that quantum computing can be a serious treat to blockchains' security and to cryptography in general. Now, we can wonder where are we in building a quantum computer ? \newline
+
+As we already mentionned, quantum computers come up with a physical challenge because qubit aren't stable (see \cite{closeToQuantum}). Actually, there are different ways to implement a qubit but they are very sensitive to noise like temperature change or electrical fluctuation. A solution is to keep the circuits very cold, around the absolute zero (-273 degrees Celsius) but it involves large infrastructures.
+
+So for now, there is still a need in research to put together large numbers of qubits (from a thousand to millions) but to keep it a reasonable size. \newline
+
+Then, when can we hope to see the first 'real' quantum computers ? According to the recent improvements we made, we may think we're closed to the apogee, but in fact history has shown us that researches and advances take time. \newline
+
+Some had even predicted quantum computers before 2019 but with the work left to do, 10 years seems to be a reasonable estimation.
+
+\section{Do we have a contingency plan ?}
+
+Let's have a look to the future and put ourselves in the quantum apogee. Actually, in parallel of the researches to develop quantum computing, some have found new algorithms and techniques to strengthen cryptography against quantum computers.
+
+This new field of research is called post-quantum cryptography and some algorithms could be used to secure blockchains. In the actual version of the blockchain, we'll faced two issues against a quantum computer: \newline
+
+\begin{itemize}
+  \item Signature breakage: because RSA algorithm used for signing transactions will be broken. A easy solution is to change the public / private key of the sender at each transaction, this is already a recommended practice.
+  \item As we mentioned, mining will be in danger. A solution will be to change the proof of work to be quantum resistant (see \cite{quantum_attacks}). Here are the basic properties we want for a proof of work: \newline
+
+  \begin{enumerate}
+    \item A adjustable difficulty according to the network computational power.
+    \item The PoW is difficult to find but easy to verify.
+    \item No advantage for quantum computers to find the PoW faster than a classical computer.
+  \end{enumerate}
+  \medskip
+
+  The points 1 et 2 are already accomplished by the actual PoW. To satisfy point 3, an alternative is to base the difficulty to find the PoW not on computational power but on memory. \newline
+
+  For example, we could use Momentum, a memory intensive proof of work based on finding birthday collisions (see \cite{momentum}). 
+\end{itemize}

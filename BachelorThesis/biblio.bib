@@ -35,15 +35,6 @@
 	author = {Gervais, Arthur and Karame, Ghassan O. and Wüst, Karl and Glykantzis, Vasileios and Ritzdorf, Hubert and Capkun, Srdjan},
 }
 
-@article{quantum_attacks,
-	title = {Quantum {Attacks} on {Bitcoin}, and {How} to {Protect} {Against} {Them}},
-	url = {https://ledgerjournal.org/ojs/index.php/ledger/article/view/127},
-	abstract = {The key cryptographic protocols used to secure the internet and ﬁnancial transactions of today are all susceptible to attack by the development of a sufﬁciently large quantum computer. One particular area at risk is cryptocurrencies, a market currently worth over 100 billion USD. We investigate the risk posed to Bitcoin, and other cryptocurrencies, by attacks using quantum computers. We ﬁnd that the proof-of-work used by Bitcoin is relatively resistant to substantial speedup by quantum computers in the next 10 years, mainly because specialized ASIC miners are extremely fast compared to the estimated clock speed of near-term quantum computers. On the other hand, the elliptic curve signature scheme used by Bitcoin is much more at risk, and could be completely broken by a quantum computer as early as 2027, by the most optimistic estimates. We analyze an alternative proof-of-work called Momentum, based on ﬁnding collisions in a hash function, that is even more resistant to speedup by a quantum computer. We also review the available post-quantum signature schemes to see which one would best meet the security and efﬁciency requirements of blockchain applications.},
-	urldate = {2019-03-31},
-	journal = {Ledger},
-	author = {Aggarwal, Divesh and Brennen, Gavin and Lee, Troy and Santha, Miklos and Tomamichel, Marco},
-}
-
 @article{nakamoto_bitcoin,
 	title = {Bitcoin: {A} {Peer}-to-{Peer} {Electronic} {Cash} {System}},
 	abstract = {A purely peer-to-peer version of electronic cash would allow online payments to be sent directly from one party to another without going through a financial institution. Digital signatures provide part of the solution, but the main benefits are lost if a trusted third party is still required to prevent double-spending. We propose a solution to the double-spending problem using a peer-to-peer network. The network timestamps transactions by hashing them into an ongoing chain of hash-based proof-of-work, forming a record that cannot be changed without redoing the proof-of-work. The longest chain not only serves as proof of the sequence of events witnessed, but proof that it came from the largest pool of CPU power. As long as a majority of CPU power is controlled by nodes that are not cooperating to attack the network, they'll generate the longest chain and outpace attackers. The network itself requires minimal structure. Messages are broadcast on a best effort basis, and nodes can leave and rejoin the network at will, accepting the longest proof-of-work chain as proof of what happened while they were gone.},
@@ -204,4 +195,28 @@ it is infeasible to find two different messages with the same hash valueCryptogr
 	title = {Grover's algorithm - Wikipedia},
 	url = {https://en.wikipedia.org/w/index.php?title=Grover%27s_algorithm&oldid=903654732},
 	urldate = {2019-07-27}
+}
+
+@misc{closeToQuantum,
+	title = {How {Close} {Are} {We}--{Really}--to {Building} a {Quantum} {Computer}?},
+	url = {https://www.scientificamerican.com/article/how-close-are-we-really-to-building-a-quantum-computer/},
+	abstract = {Intel\&rsquo;s head of quantum computing talks about the challenges of developing algorithms, software programs and other necessities for a technology that doesn\&rsquo;t yet exist},
+	urldate = {2019-07-28},
+	journal = {Scientific American},
+	author = {Greenemeier, Larry},
+}
+
+@article{quantum_attacks,
+	title = {Quantum {Attacks} on {Bitcoin}, and {How} to {Protect} {Against} {Them}},
+	url = {https://ledgerjournal.org/ojs/index.php/ledger/article/view/127},
+	abstract = {The key cryptographic protocols used to secure the internet and ﬁnancial transactions of today are all susceptible to attack by the development of a sufﬁciently large quantum computer. One particular area at risk is cryptocurrencies, a market currently worth over 100 billion USD. We investigate the risk posed to Bitcoin, and other cryptocurrencies, by attacks using quantum computers. We ﬁnd that the proof-of-work used by Bitcoin is relatively resistant to substantial speedup by quantum computers in the next 10 years, mainly because specialized ASIC miners are extremely fast compared to the estimated clock speed of near-term quantum computers. On the other hand, the elliptic curve signature scheme used by Bitcoin is much more at risk, and could be completely broken by a quantum computer as early as 2027, by the most optimistic estimates. We analyze an alternative proof-of-work called Momentum, based on ﬁnding collisions in a hash function, that is even more resistant to speedup by a quantum computer. We also review the available post-quantum signature schemes to see which one would best meet the security and efﬁciency requirements of blockchain applications.},
+	urldate = {2019-03-31},
+	journal = {Ledger},
+	author = {Aggarwal, Divesh and Brennen, Gavin and Lee, Troy and Santha, Miklos and Tomamichel, Marco},
+}
+
+@article{momentum,
+	title = {{MOMENTUM} - {A} {Memory}-{Hard} {Proof}-{Of}-{Work} {Via} {Finding} {Birthday} {Collisions} {Momentum}},
+	abstract = {We introduce the concept of memory-hard proof-of-work algorithms and argue that in order for proof-of-work based systems to be secure against attacks using custom hardware, they should be constructed from memory-hard functions. Proof-of-work is an economic measure that is designed to be expensive to ﬁnd but cheap to verify. Existing solutions used for proof-of-work are either trivial to parallelize or too slow to verify when tuned to use gigabytes of memory. We present a new family of proof-of-work algorithms that can be validated in less than a millisecond but can demand any amount of memory for ﬁnding solutions in a practical manner.},
+	author = {Larimer, Daniel},
 }
