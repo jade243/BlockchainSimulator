@@ -1,10 +1,10 @@
-\section{Is quantum computing a treat to blockchains' security ?}
+\section{Is quantum computing a treat to blockchains' security?}
 
 Now that we have a better idea of how a quantum computer works, let's try to figure out how to hack mining process with a quantum computer (see \cite{quantum_computer}). \newline
 
 For recall, the goal of mining is to find a nonce so the hash is lower than a specific target. The nonce is a 4-bytes value, so to use quantum computers to solve this problem, we'll need 4 qubytes or 32 qubits. A block header is 80 bytes so we'll append the 4 qubytes to 76 regular bytes and we'll get a 256 bits result.\newline
 
-Nowadays, quantum computers are not as easy to program as classic computers because quantum computers don't use the same logical gates so we'll need to build the circuit corresponding to our algorithm.
+Nowadays, quantum computers are not as easy to program as classic computers because quantum computers don't use the same logic gates so we'll need to build the circuit corresponding to our algorithm.
 
 \clearpage
 
@@ -15,7 +15,7 @@ Nowadays, quantum computers are not as easy to program as classic computers beca
 \end{figure}
 \medskip
 
-But here we have a problem, with a quantum computers it's quite easy to find the final hash lower than the target but, due to the wave function collapse, we can't find which value of the nonce gave this output but it's exactly what we're looking for. \newline
+But here we have a problem, with a quantum computer, it's quite easy to find the final hash lower than the target but, due to the wave function collapse, we can't find which value of the nonce gave this output but it's exactly what we're looking for. \newline
 
 With the qubits, we can simultaneously have all the hashes with all the possible values of the nonce. To find the right ones, we could loop through all the solutions but it won't be faster than traditional mining so it's back to square one.
 
@@ -48,7 +48,7 @@ where $\sum_{i=0}^{N-1} | c_i |^2 = 1$. \newline
 Grover algorithm follows these steps: \newline
 
 \begin{enumerate}
-  \item It creates an uniform superposition over all states: \newline
+  \item It creates a uniform superposition over all states: \newline
 
   $\bra{\Psi}_{initial} = \frac{1}{\sqrt{N}} \sum_{i=0}^{N-1} \bra{i}$ \newline
 
@@ -91,6 +91,6 @@ Next some schemes to illustrate the steps:
 \end{figure}
 \medskip
 
-Now, with this algorithm we can reduce the complexity to $\mathcal{O}(\sqrt{N})$. In our case, we have 32 qubits so there are $N = 2^{32}$ possible values then we have to search in $\sqrt(N) = \sqrt{2^{32}} = 2^{16} = 65,536$. \newline
+Now, with this algorithm, we can reduce the complexity to $\mathcal{O}(\sqrt{N})$. In our case, we have 32 qubits so there are $N = 2^{32}$ possible values then we have to search in $\sqrt(N) = \sqrt{2^{32}} = 2^{16} = 65,536$. \newline
 
-With this method, we have a theoretical solution to hack mining with quantum computer, so it proves that quantum computing could be a real treat to blockchains security. It will depend on the evolution in the quantum field and the researches to improve performances and stability of quantum computers.
+With this method, we have a theoretical solution to hack mining with a quantum computer, so it proves that quantum computing could be a real treat to blockchains security. It will depend on the evolution in the quantum field and the researches to improve the performances and stability of quantum computers.

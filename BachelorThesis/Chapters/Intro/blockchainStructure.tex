@@ -1,10 +1,10 @@
 \section{Blockchain structure}
 
-In this part, we'll try to understand in more details the blockchain's components and how they work together.
+In this part, we'll try to understand in more detail the blockchain's components and how they work together.
 
 Bitcoin is a specific implementation of the blockchain but it's the starting point of our analysis. \newline
 
-As we mentioned before, the blockchain is based on a decentralized implementation. Actually, it's based on a peer-to-peer network.
+As we mentioned before, the blockchain is based on decentralized implementation. Actually, it's based on a peer-to-peer network.
 
 \begin{figure}[h]
 \centering
@@ -27,9 +27,9 @@ Each node has three responsibilities :
 
 The main feature of the blockchain is to record transactions.
 
-A transaction is composed by a list of inputs and a list of outputs (see Figure~\ref{transaction}). Outputs can include the payer itself . \newline
+A transaction is composed of a list of inputs and a list of outputs (see Figure~\ref{transaction}). Outputs can include the payer itself. \newline
 
-While doing a transaction, one wants to be sure that the payer is the true owner of the money. Then, in order to check this,  we use digital signatures :
+While doing a transaction, one wants to be sure that the payer is the true owner of the money. Then, to check this,  we use digital signatures :
 
 \begin{itemize}
   \item The inputs of the transaction are encrypted with the public key of the payer.
@@ -37,7 +37,7 @@ While doing a transaction, one wants to be sure that the payer is the true owner
   \item Then, he "locks" the outputs with the public key of the payees.
 \end{itemize}
 
-Technically, this is done with scripts which accompanied each input and output (see \cite{broken_crypto_primitives} for more details).
+Technically, this is done with scripts linked to each input and output (see \cite{broken_crypto_primitives} for more details).
 
 
 \begin{figure}[h]
@@ -55,7 +55,7 @@ Now that we have a transaction, we can transmit it to a node of the network. The
 
 Once the transaction is accepted by a node, it will stay in a special area called the Mempool (Memory pool), this is where all unconfirmed transactions wait to be added in a block. A node can prioritize the transactions in its Mempool, especially if he's running out of memory, he can choose the order of arrival or, more probably, the highest transaction fee.
 
-When a node receives the information that a new block has been added to the blockchain, he removes all new confirmed transactions from his Mempool.  \newline
+When a node receives the information that a new block has been added to the blockchain, he removes all newly confirmed transactions from his Mempool.  \newline
 
 To form a new block candidate, a miner gathers transactions from the Mempool. Then, he will try to mine this block to add it to the blockchain. The miner will also add a block header which gives more information about the block (see \ref{blockHeader}). \newline
 
@@ -68,7 +68,7 @@ To form a new block candidate, a miner gathers transactions from the Mempool. Th
 
   \subsection{Block header} \label{blockHeader}
 
-A block header is a summary of the block, it's like its metadata. A block header contains six fields : \newline
+A block header is a summary of the block, it's like its metadata. A block header contains six fields: \newline
 
 \begin{tabular}{lll}
    version & The block's version & 4 bytes\\
@@ -84,35 +84,35 @@ We'll see later that block headers are used for mining (see \ref{mining}).
 
   \subsection{Merkle root} \label{merkleRoot}
 
-  As we've just seen, one of the block header fields is a merkle root. Conceptually, it represents a fingerprint of the transactions' list and concretely it's just a hash.
+  As we've just seen, one of the block header fields is a Merkle root. Conceptually, it represents a fingerprint of the transactions' list and concretely it's just a hash.
 
   The blockchain uses Merkle trees for two reasons :
 
   \begin{itemize}
-    \item To have a lightweight representation of the transactions, because it results with only a hash.
+    \item To have a lightweight representation of the transactions because it results in only a hash.
     \item To be able to check if a transaction exists in a block without knowing all transactions in this block.
   \end{itemize}
 
-  Merkle trees use an hash function, for blockchains, they use the same function than mining, which is
+  Merkle trees use a hash function, for blockchains, they use the same function than mining, which is
 
   SHA256(SHA256(.)).
 
   \begin{figure}[h]
   \centering
   \includegraphics[width=\textwidth]{Figures/merkleTree}
-  \caption{A merkle tree}
+  \caption{A Merkle tree}
   \end{figure}
   \medskip
 
   The main advantage of this technology is the speed and the ease to verify if a transaction belongs to a block. We don't need to know all transactions of the block and we don't even need to reveal any data from the transactions but only their hashes. \newline
 
-  For example, if we want to check if the transaction 3 belongs to the block in our previous figure. We have to know its hash (Hash 3), Hash 4, Hash 12 and Hash 56. With those hashes , we can reconstruct the Merkle root. If it's the same, this means that the transaction 3 belongs to the block and that no transaction has been modified so the whole block is correct.
+  For example, if we want to check if the transaction 3 belongs to the block in our previous figure. We have to know its hash (Hash 3), Hash 4, Hash 12 and Hash 56. With those hashes, we can reconstruct the Merkle root. If it's the same, this means that the transaction 3 belongs to the block and that no transaction has been modified so the whole block is correct.
 
   \subsection{The network}
 
   With all the concepts presented above, we can create a transaction, add it in a block, which will be mined thanks to its block header. Now, let's see how the nodes in the network secure the blockchain together. \newline
 
-  The strength of the blockchain lies in its network, because each node keep a complete or partial copy of the blockchain. To keep the network updated, the nodes constantly share information between them. Typically, to broadcast a new transaction or a new mined block :
+  The strength of the blockchain lies in its network because each node keeps a complete or partial copy of the blockchain. To keep the network updated, the nodes constantly share information between them. Typically, to broadcast a new transaction or a newly mined block :
 
   \clearpage
 
@@ -124,7 +124,7 @@ We'll see later that block headers are used for mining (see \ref{mining}).
   \caption{Communication inside the network}
   \end{figure}
 
-  Then, each node updates its own version of the blockchain. Now, one can wonder what happens if a node receives two different mined blocks at the same time ?
+  Then, each node updates its version of the blockchain. Now, one can wonder what happens if a node receives two different mined blocks at the same time?
 
   The node will fork the blockchain and have two versions of it and he will keep accepting blocks for both chains. As long as they have the same length, the node will choose to work on one of the chains but if one chain becomes longer, the node will keep it and forget the other one.
 
@@ -138,10 +138,10 @@ We'll see later that block headers are used for mining (see \ref{mining}).
 
     \subsection{Bitcoin Block example}
 
-  Bitcoin blockchain is public, we can follow the evolution on web sites like www.blockchain.com (\cite{blockchain_web_site}). We can see the fields we described and some other details, for example : \newline
+  Bitcoin blockchain is public, we can follow the evolution on web sites like www.blockchain.com (\cite{blockchain_web_site}). We can see the fields we described and some other details, for example: \newline
 
   \begin{figure}[h]
   \centering
   \includegraphics[width=15cm]{Figures/Block573522}
-  \caption{Example of a Bitcoin Block}
+  \caption{Example of a Bitcoin block}
   \end{figure}

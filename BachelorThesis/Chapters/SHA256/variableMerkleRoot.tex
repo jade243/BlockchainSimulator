@@ -1,21 +1,21 @@
 \section{Pre-image with variable Merkle root}
 
-  \subsection{Random merkle root}
+  \subsection{Random Merkle root}
 
-In the previous section, we've assumed that the merkle root is a fixed field, because we've supposed that the list of transactions was also fixed. \newline
+In the previous section, we've assumed that the Merkle root is a fixed field because we've supposed that the list of transactions was also fixed. \newline
 
-But an adversary could try work backwards, to choose a random merkle root and to try to reconstruct the merkle tree leading to semantically valid transactions. By contrast with the previous method, the transactions are created by the attacker himself. However, even without figuring out any probabilities, we can conclude that this method is infeasible. That's because, the reconstructed transactions will have to contain valid outputs and valid signatures.
+But an adversary could try to work backward, to choose a random Merkle root and to try to reconstruct the Merkle tree leading to semantically valid transactions. By contrast with the previous method, the transactions are created by the attacker himself. However, even without figuring out any probabilities, we can conclude that this method is infeasible. That's because the reconstructed transactions will have to contain valid outputs and valid signatures.
 
   \subsection{Coin base transactions}
 
-However, there is an exception for the previous remark based on two observations. First, the system doesn't have a constraint about the number of transactions in a block and second, each block has a coinbase transaction, which creates money as reward for the miner. \newline
+However, there is an exception for the previous remark based on two observations. First, the system doesn't have a constraint about the number of transactions in a block and second, each block has a coinbase transaction, which creates money as a reward for the miner. \newline
 
 An attacker could create a block with only a coinbase transaction. These transactions have a fixed prefix and suffix and they have a length-variable field up to 100 bytes, scriptSig.
 
-Then, the attacker can create a valid block by finding a valid merkle root : $h(a || x || b) = T$, where x is the merkle root, T is the target and a and b are the prefix and suffix of the block header.
+Then, the attacker can create a valid block by finding a valid Merkle root: $h(a || x || b) = T$, where x is the Merkle root, T is the target and a and b are the prefix and suffix of the block header.
 
-Finally, he'll have to solve : $h(b || y || d) = x$, where y is the scriptSig and b and d are the prefix and suffix of the coinbase transaction. So the merkle root match with a valid transaction.
+Finally, he'll have to solve: $h(b || y || d) = x$, where y is the scriptSig and b and d are the prefix and suffix of the coinbase transaction. So the Merkle root match with a valid transaction.
 
 ($|| . ||$ means concatenation)\newline
 
-Both prediction will have a pre-image with high probability but if not, the attacker can try with another target or with different length for the scriptSig. Nevertheless, his probability of success is very high.
+Both predictions will have a pre-image with high probability but if not, the attacker can try with another target or with different lengths for the scriptSig. Nevertheless, his probability of success is very high.
