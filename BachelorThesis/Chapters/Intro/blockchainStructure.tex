@@ -6,7 +6,7 @@ Bitcoin is a specific implementation of the blockchain but it's the starting poi
 
 As we mentioned before, the blockchain is based on decentralized implementation. Actually, it's based on a peer-to-peer network.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=4cm]{Figures/network}
 \caption{Peer-to-peer network}
@@ -22,6 +22,18 @@ Each node has three responsibilities :
 \end{itemize}
 
 \clearpage
+
+\begin{aside}
+
+\paragraph{C ++ Implementation}
+
+We wrote a C++ implementation related to this work, the goal is to simulate the mining process in blockchains. A full part is dedicated to the results we found in these simulations. \newline
+
+All along the presentation of the blockchains' principles, we'll show the implementation in our code.
+
+\end{aside}
+
+
 
   \subsection{Transaction}
 
@@ -40,7 +52,7 @@ While doing a transaction, one wants to be sure that the payer is the true owner
 Technically, this is done with scripts linked to each input and output (see \cite{broken_crypto_primitives} for more details).
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=4cm]{Figures/Transaction}
 \hspace{1cm}
@@ -59,7 +71,7 @@ When a node receives the information that a new block has been added to the bloc
 
 To form a new block candidate, a miner gathers transactions from the Mempool. Then, he will try to mine this block to add it to the blockchain. The miner will also add a block header which gives more information about the block (see \ref{blockHeader}). \newline
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=4cm]{Figures/block}
 \caption{A transaction diagram and digital signatures}
@@ -97,7 +109,7 @@ We'll see later that block headers are used for mining (see \ref{mining}).
 
   SHA256(SHA256(.)).
 
-  \begin{figure}[h]
+  \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{Figures/merkleTree}
   \caption{A Merkle tree}
@@ -116,7 +128,7 @@ We'll see later that block headers are used for mining (see \ref{mining}).
 
   \clearpage
 
-  \begin{figure}[h]
+  \begin{figure}[ht]
   \centering
   \includegraphics[width=5cm]{Figures/networkTransaction}
   \hspace{1cm}
@@ -128,7 +140,7 @@ We'll see later that block headers are used for mining (see \ref{mining}).
 
   The node will fork the blockchain and have two versions of it and he will keep accepting blocks for both chains. As long as they have the same length, the node will choose to work on one of the chains but if one chain becomes longer, the node will keep it and forget the other one.
 
-  \begin{figure}[h]
+  \begin{figure}[ht]
   \centering
   \includegraphics[width=5cm]{Figures/forkChains}
   \caption{Fork chains}
@@ -140,7 +152,7 @@ We'll see later that block headers are used for mining (see \ref{mining}).
 
   Bitcoin blockchain is public, we can follow the evolution on web sites like www.blockchain.com (\cite{blockchain_web_site}). We can see the fields we described and some other details, for example: \newline
 
-  \begin{figure}[h]
+  \begin{figure}[ht]
   \centering
   \includegraphics[width=15cm]{Figures/Block573522}
   \caption{Example of a Bitcoin block}
