@@ -43,10 +43,6 @@ vector<string> Block::getTransactions() {
   return this->transactions;
 }
 
-string Block::getShortRep() {
-  return this->shortRep;
-}
-
 int Block::getId() {
   return this->id;
 }
@@ -55,7 +51,7 @@ void Block::setId(int id) {
   this->id = id;
 }
 
-void Block::computeId() {
+string Block::getShortRep() {
   //We extract the 10 first bytes after the zeros of the bloch header's hash
   string hash = blockHeader->hashOperation();
   // Count trailing zeros
@@ -66,7 +62,7 @@ void Block::computeId() {
   // The erase function removes i characters
   // from given index (0 here)
   hash.erase(0, i);
-  this->shortRep = hash.substr(0, 10);
+  return hash.substr(0, 10);
 }
 
 string Block::getHash() {
@@ -122,7 +118,6 @@ void Block::deserialize(string s) {
       this->transactions.push_back(getString(stream));
     }
 
-    this->computeId();
   } else {
     cout << "The string doesn't start by 1 or 2" << endl;
   }
@@ -139,7 +134,7 @@ void Block::buildMerkleTree() {
 
 //Some printing functions
 void Block::printBlock() {
-  cout << "Block id : " << this->shortRep << "..." << endl;
+  cout << "Block id : " << getShortRep() << "..." << endl;
 }
 
 void Block::printTransactions(int nbTransactions) {

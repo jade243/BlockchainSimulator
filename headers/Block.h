@@ -8,10 +8,9 @@ using namespace std;
 class Block {
 
   private:
-    Block* prev;                      //pointer on the previous block
-    BlockHeader* blockHeader;         //block header
-    int id = 0;
-    string shortRep;                  //it's the 10 first bytes of the hash (to optimize visualization)
+    int id = 0;                       //Block ID to locate it in the blockchain
+    Block* prev;                      //Pointer on the previous block
+    BlockHeader* blockHeader;         //Block header
     vector<string> transactions;      //List of transactions
 
     string createTarget(int difficulty);
@@ -28,10 +27,9 @@ class Block {
     void setPrev(Block* prev);
     BlockHeader* getBlockHeader();
     vector<string> getTransactions();
-    string getShortRep();
     int getId();
     void setId(int id);
-    void computeId();         //The first 10 blocks of the block hash
+    string getShortRep(); //The first 10 blocks after the zeros of the block hash       
     string getHash();   //The block hash
 
     //Methods to send and receive blocks

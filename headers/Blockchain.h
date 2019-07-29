@@ -7,9 +7,8 @@ using namespace std;
 class Blockchain {
 
   private:
-    Block* head; //The head of the blockchain, i.e the last mined block
-    string target = "1f0696f4"; //Target for any new block in the blockchain
-    int blockID = -1;
+    Block* head;        //The head of the blockchain, i.e the last mined block
+    int blockID = -1;   //Block ID of the more recent block
 
     string getString(stringstream& stream);
 

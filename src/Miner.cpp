@@ -72,7 +72,6 @@ bool Miner::mine(Block* block) {
   string hash = block->getBlockHeader()->hashOperation();
   //If we are lower, we're done
   if (hash <= target) {
-    block->computeId();
     return true;
   }
   return false;

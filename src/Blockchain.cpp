@@ -29,11 +29,6 @@ string Blockchain::getGenesisHash() {
   return hash;
 }
 
-//To get the actual target
-string Blockchain::getTarget() {
-  return this->target;
-}
-
 int Blockchain::getLastID() {
   return this->blockID;
 }

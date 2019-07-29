@@ -21,7 +21,6 @@ void mine(Block* block) {
     //If we are lower, we're done
     if (hash <= target) {
       cout << "Block mined !!!" << endl;
-      block->computeId();
       break;
     }
   }
@@ -42,6 +41,7 @@ int main()
     int nbTransactions = 100;
     int nbUsers = 10;
     double nbBlocks = floor(nbTransactions / TX_PER_BLOCK);
+    int difficulty = 3;
 
     TransactionsGenerator* sim = new TransactionsGenerator(nbUsers, nbTransactions);
     vector<string> transactions = sim->generateVectorTransactions();
@@ -52,7 +52,7 @@ int main()
     for (int i=0; i<nbBlocks; i++) {
 
       //Create a new block
-      block = new Block(blockchain.getHashPrevBlock(), blockchain.getTarget());
+      block = new Block(blockchain.getHashPrevBlock(), difficulty);
 
       //Build the merkle tree
       fillBlock(block, transactions);
