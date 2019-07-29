@@ -25,15 +25,18 @@ Each node has three responsibilities :
 
 \begin{aside}
 
-\paragraph{C ++ Implementation}
+\paragraph{C ++ Code}
 
-We wrote a C++ implementation related to this work, the goal is to simulate the mining process in blockchains. A full part is dedicated to the results we found in these simulations. \newline
+We've written a C++ code to simulate blockchains focusing on the mining process. The code is written in C++ using the library MPI to parallelize the process. Moreover, the executions were made on the Geneva University cluster to truly parallelize the code.
 
-All along the presentation of the blockchains' principles, we'll show the implementation in our code.
+A full part is dedicated to the results we found in these simulations. \newline
+
+Thus, we can simulate several miners trying to mine blocks and keep the blockchain synchronized. The goal is to deeply understand the network structure and to observe the evolution of the blockchain in the time. \newline
+
+All along with the presentation of the blockchain's principles, we'll show the implementation in our code.
 
 \end{aside}
-
-
+\medskip
 
   \subsection{Transaction}
 
@@ -60,6 +63,31 @@ Technically, this is done with scripts linked to each input and output (see \cit
 \caption{A transaction diagram and digital signatures}
 \label{transaction}
 \end{figure}
+\medskip
+
+\begin{aside}
+
+\paragraph{C++ code}
+
+As we mentioned, the code focus on the mining process so we've simplified transaction management. \newline
+
+In our simulation, a transaction is just a string, for example: (each line is a transaction) \newline
+
+\includegraphics[width=6cm]{Figures/transactionsExample}
+\medskip
+
+So we don't have to manage signatures, inputs and outputs and it won't affect the mining process.
+
+\clearpage
+
+To generate those transactions, we've created a specific generator which creates a given number of transactions with limitations in the amount of money exchanged for a given number of users. \newline
+
+\includegraphics[width=10cm]{Figures/ClassTransactionsGenerator}
+\medskip
+
+\end{aside}
+\medskip
+
 
   \subsection{Block}
 
@@ -76,7 +104,31 @@ To form a new block candidate, a miner gathers transactions from the Mempool. Th
 \includegraphics[width=4cm]{Figures/block}
 \caption{A transaction diagram and digital signatures}
 \end{figure}
+\medskip
 
+\begin{aside}
+
+\paragraph{C++ code}
+
+A block is an object with the following fields: \newline
+
+\begin{itemize}
+  \item A vector of string representing the transactions.
+  \item A block header (see explanations below).
+  \item An ID to get its position in the blockchain.
+  \item We also add a reference to the previous block, this is used to build the blockchain.
+\end{itemize}
+\medskip
+
+\clearpage
+\medskip
+\includegraphics[width=10cm]{Figures/ClassBlock}
+\medskip
+
+A block can also build the Merkle tree with its transactions and be added in a blockchain.
+
+\end{aside}
+\medskip
 
   \subsection{Block header} \label{blockHeader}
 
@@ -93,6 +145,19 @@ A block header is a summary of the block, it's like its metadata. A block header
 
 We'll see later that block headers are used for mining (see \ref{mining}).
 
+\begin{aside}
+
+\paragraph{C++ code}
+
+As we've just seen, a block header contains all the fields mentioned: version, previous block hash, Merkle root, time, target and the nonce. \newline
+
+\includegraphics[width=14cm]{Figures/ClassBlockHeader}
+\medskip
+
+The version is always the same in our simulation because it won't affect mining. In the real world, the version helps to decode the block. A block header can set a nonce and compute its hash (by applying SHA256 twice).
+
+\end{aside}
+\medskip
 
   \subsection{Merkle root} \label{merkleRoot}
 
@@ -120,13 +185,23 @@ We'll see later that block headers are used for mining (see \ref{mining}).
 
   For example, if we want to check if the transaction 3 belongs to the block in our previous figure. We have to know its hash (Hash 3), Hash 4, Hash 12 and Hash 56. With those hashes, we can reconstruct the Merkle root. If it's the same, this means that the transaction 3 belongs to the block and that no transaction has been modified so the whole block is correct.
 
+
+  \begin{aside}
+
+  \paragraph{C++ code}
+
+  We've created a class to build the Merkle tree from a vector of string and to return the Merkle root. \newline
+
+  \includegraphics[width=14cm]{Figures/ClassMerkleTree}
+
+  \end{aside}
+  \medskip
+
   \subsection{The network}
 
   With all the concepts presented above, we can create a transaction, add it in a block, which will be mined thanks to its block header. Now, let's see how the nodes in the network secure the blockchain together. \newline
 
   The strength of the blockchain lies in its network because each node keeps a complete or partial copy of the blockchain. To keep the network updated, the nodes constantly share information between them. Typically, to broadcast a new transaction or a newly mined block :
-
-  \clearpage
 
   \begin{figure}[ht]
   \centering
@@ -146,7 +221,37 @@ We'll see later that block headers are used for mining (see \ref{mining}).
   \caption{Fork chains}
   \end{figure}
 
-  The blockchain is always the longest chain created because it's the one that has requested more work of mining. This means that to have control over the blockchain, an attacker should have the majority of the computational power (at least 51\%).
+  The blockchain is always the longest chain created because it's the one that has requested more work of mining. This means that to have control over the blockchain, an attacker should have the majority of the computational power (at least 51\%). \newline
+
+  \begin{aside}
+
+  \paragraph{C++ code}
+
+  As we said, the network is composed of miners so we implement mines as an object with the following fields: \newline
+
+  \begin{itemize}
+    \item An ID
+    \item A vector of string to describe his mempool.
+    \item A vector of blockchains to describe his versions of blockchains including forks.
+  \end{itemize}
+  \medskip
+
+  \clearpage
+
+  \medskip
+  \includegraphics[width=10cm]{Figures/ClassMiner}
+  \medskip
+
+  A miner can fill a new block with transactions from his mempool, mine a block and add a block to one of his blockchains.
+
+  Miners also have some functions to communicate through the network. For example, to serialize and deserialize blockchains (because only serializable objects can be sent in the network) or to handle a block the miner received. \newline
+
+  Finally, blockchains are represented as linked lists with basic operations like adding a block or consult the last block. \newline
+
+  \includegraphics[width=10cm]{Figures/ClassBlockchain}
+
+  \end{aside}
+  \medskip
 
     \subsection{Bitcoin Block example}
 
@@ -157,3 +262,5 @@ We'll see later that block headers are used for mining (see \ref{mining}).
   \includegraphics[width=15cm]{Figures/Block573522}
   \caption{Example of a Bitcoin block}
   \end{figure}
+
+  \clearpage
