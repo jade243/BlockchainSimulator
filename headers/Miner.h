@@ -11,52 +11,56 @@ using namespace std;
 class Miner {
 
   private:
-    string name;
-    int id;
-    vector<string> memPool;
-    vector<Blockchain*> blockchains;
-    //Blockchain* blockchain = new Blockchain();
+    int id;                             //Miner's ID
+    vector<string> memPool;             //List of transactions
+    vector<Blockchain*> blockchains;    //Blockchains (sorted by length)
 
     string getString(stringstream& stream);
 
 
   public:
+    //Constructors
     Miner();
-    Miner(string name, int id);
+    Miner(int id);
+
+    //Getters and setters
     void getTransactionsFromFile(string fileName);
     void setTransactions(vector<string> transactions);
-    Block* fillBlock(Block* block, int nbTransactionsByBlock);
-    bool mine(Block* block);
+    Blockchain* getBlockchain(int pos);
+    size_t getNbChains();
+    string getHashPrevBlock();
+
+    //Mempool maninpulation
+    bool isEmpty();   //Check if the memPool is empty
+    bool updateMemPool(Block* newBlock, Block* oldBlock);
+    void resetBlock(Block* block); //Push the transactions back to the mempool
+
+    //Blockchains manipulation
+    void clearBlockchains();
     void addBlock(Block* block);
     void addBlock(Block* block, int pos);
-    bool isEmpty();
-    void clearBlockchains();
-
-    size_t getNbChains();
-    Blockchain* getBlockchain(int pos);
-
-    string getGenesisHash();
-    bool updateMemPool(Block* newBlock, Block* oldBlock);
-    void resetBlock(Block* block);
-
-    void sortBlockchains();
-    int searchBlock(Block* block);
-
     void createForkChain(Block* head);
-    int lastIndex();
+    void sortBlockchains();
+    int searchBlock(Block* block); //search block in all blockchains
+
+    //Block manipulation
+    Block* fillBlock(Block* block, int nbTransactionsByBlock);
+    string getGenesisHash();
+    bool mine(Block* block);
+
+    //Serialization / deserialization of transactions
     string serializeTransactions(vector<string> transactions);
     vector<string> deserializeTransactions(string s);
 
+    //Serialization / deserialization of blockchains
     void deserializeBlockchain(string s);
     string serializeBlockchain(int pos);
 
+    //Communication
     bool handleReceivedBlock(Block* block, int senderRank);
-    string getHashPrevBlock();
-
     int getMessageType(string s);
 
-    int getLastID();
-
+    //Displaying methods
     void printInfos();
     void printAllInfos(int myRank);
     void printBlockchain(int pos);

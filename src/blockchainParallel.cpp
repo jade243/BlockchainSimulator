@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
 
   //Data
   vector<string> transactions;
-  Miner* miner = new Miner("", myRank);
+  Miner* miner = new Miner(myRank);
   Block* block;
 
   //To communicate the transactions
