@@ -38,7 +38,7 @@ void fillBlock(Block* block, vector<string> transactions) {
 
 int main()
 {
-    int nbTransactions = 100;
+    int nbTransactions = 50;
     int nbUsers = 10;
     double nbBlocks = floor(nbTransactions / TX_PER_BLOCK);
     int difficulty = 3;
