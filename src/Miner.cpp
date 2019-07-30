@@ -210,11 +210,6 @@ bool Miner::handleReceivedBlock(Block* block, int senderRank) {
 
     Block* tmp = blockchains.at(i)->consultLastBlock();
 
-    // && hashPrev.compare(tmp->getHash()) == 0
-    // if (tmp != NULL) {cout << "Boolean value : " << (hashPrev.compare(tmp->getHash()) == 0) << endl;}
-
-
-
     //We check if it's the next block (we won't have to create forks then)
     if (tmp == NULL || hashPrev.compare(tmp->getHash()) == 0) {
       //cout << "I add a block in the blockchain n°" << i << endl;
@@ -228,7 +223,6 @@ bool Miner::handleReceivedBlock(Block* block, int senderRank) {
     else if (tmp != NULL && hash.compare(tmp->getHash()) == 0) {
       //cout << "I know this block already" << endl;
       foundBlock = true;
-      break;
     }
     //We check if it's part of the chain
     else {
@@ -236,13 +230,20 @@ bool Miner::handleReceivedBlock(Block* block, int senderRank) {
       while (tmp != NULL) {
         tmp = tmp->getPrev();
 
-        if (hashPrev.compare(tmp->getHash()) == 0) {
+        if (hashPrev.compare(tmp->getHash()) == 0) {    //We check if it's the next block
           //cout << "I will fork a chain" << endl;
           createForkChain(tmp);
           addBlock(block, getNbChains());
+
+          //We send back our version of the blockchain
+          string s = serializeBlockchain(i);
+          cout << "I've sent a blockchain to " << senderRank << endl;
+          MPI_Isend(&s[0], s.size()+1, MPI_CHAR, senderRank, tag, MPI_COMM_WORLD, &request);
+
           foundBlock = true;
+          break;
         }
-        else if (hash.compare(tmp->getHash()) == 0) {
+        else if (hash.compare(tmp->getHash()) == 0) {   //We check if it's the same block
           string s = serializeBlockchain(i);
           cout << "I've sent a blockchain to " << senderRank << endl;
           MPI_Isend(&s[0], s.size()+1, MPI_CHAR, senderRank, tag, MPI_COMM_WORLD, &request);
