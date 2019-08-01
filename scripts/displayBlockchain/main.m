@@ -133,10 +133,14 @@ longest_chain = fliplr(longest_chain);
 miners = fliplr(miners);
 times = fliplr(times);
 
+var_times = {'Minimum', 'Maximum', 'Mean', 'Median', 'Range'};
+T_times = table(min(times)/60, max(times)/60, mean(times)/60, median(times)/60, (max(times)-min(times))/60, 'VariableNames', var_times);
+
+clearvars -except final_time nb_proc nb_transactions procs names T T_times longest_chain miners times
+
 %% We've created all needed variables
 
 % We display the table summing up the rewards won
-
 TString = evalc('disp(T)');
 % Use TeX Markup for bold formatting and underscores.
 TString = strrep(TString,'<strong>','\bf');
@@ -150,6 +154,22 @@ annotation(gcf,'Textbox','String',TString,'Interpreter','Tex','FontName',FixedWi
             'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle');
 
 saveas(gcf,'rewards.png')
+
+% We display statistics 
+figure
+TString = evalc('disp(T_times)');
+% Use TeX Markup for bold formatting and underscores.
+TString = strrep(TString,'<strong>','\bf');
+TString = strrep(TString,'</strong>','\rm');
+TString = strrep(TString,'_','\_');
+% Get a fixed-width font.
+FixedWidth = get(0,'FixedWidthFontName');
+% Output the table using the annotation command.
+annotation(gcf,'Textbox','String',TString,'Interpreter','Tex','FontName',FixedWidth, ...
+            'Units','Normalized', 'Position',[0 0 1 1], 'FontSize', 10, ...
+            'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle');
+
+saveas(gcf,'stats.png')
 
 % We display the evolution of the longest blockchain
 square_size = 1000;
@@ -182,7 +202,7 @@ for j = 1 : size(longest_chain, 2) / nb_blocks
     saveas(gcf,strcat('timeline_', int2str(j), '.png'))
 end
 
-
+clearvars -except final_time nb_proc nb_transactions procs names T longest_chain miners times
 
 
 
