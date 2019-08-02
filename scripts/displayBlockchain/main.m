@@ -9,6 +9,14 @@ clc
 clear
 close all
 
+%% We set up some variables
+
+% The times are originally in milliseconds so we can divide them to get
+% seconds (by 1000), minutes (by 60,000), ...
+div_time = 1000; 
+square_size = 50;
+measure = 'seconds';
+
 %%
 
 % First, let's check filenames and get their prefix 
@@ -118,7 +126,7 @@ for i = 1 : nb_proc
    names{i} = ['Proc ' int2str(i)];
 end
 
-clearvars -except final_time nb_proc nb_transactions procs names
+clearvars -except final_time nb_proc nb_transactions procs names div_time square_size measure
 
 %% We've extracted all data from the logs
 
@@ -133,10 +141,12 @@ longest_chain = fliplr(longest_chain);
 miners = fliplr(miners);
 times = fliplr(times);
 
-var_times = {'Minimum', 'Maximum', 'Mean', 'Median', 'Range'};
-T_times = table(min(times)/60, max(times)/60, mean(times)/60, median(times)/60, (max(times)-min(times))/60, 'VariableNames', var_times);
+var_times = {'Unit', 'Minimum', 'Maximum', 'Range', 'Mean', 'Median'};
+T_times = table({measure}, min(times)/div_time, max(times)/div_time, ...
+            (max(times)-min(times))/div_time, mean(times)/div_time, ...
+            median(times)/div_time, 'VariableNames', var_times);
 
-clearvars -except final_time nb_proc nb_transactions procs names T T_times longest_chain miners times
+clearvars -except final_time nb_proc nb_transactions procs names div_time square_size measure T T_times longest_chain miners times
 
 %% We've created all needed variables
 
@@ -172,13 +182,14 @@ annotation(gcf,'Textbox','String',TString,'Interpreter','Tex','FontName',FixedWi
 saveas(gcf,'stats.png')
 
 % We display the evolution of the longest blockchain
-square_size = 1000;
 square_y = 0;
 margin_up = 0.2;
 margin_low = 220;
 colors = {[0 0.4470 0.7410], [0.8500 0.3250 0.0980], [0.9290 0.6940 0.1250]};
 
 nb_blocks = 10;
+
+times = times ./ div_time;
 
 for j = 1 : size(longest_chain, 2) / nb_blocks
     figure
@@ -194,7 +205,7 @@ for j = 1 : size(longest_chain, 2) / nb_blocks
     axis equal
     xlim([times(1+(j-1)*nb_blocks)-square_size times(i)+2*square_size])
     ylim([square_y-square_size square_y+20*square_size])
-    xlabel('Time in milliseconds')
+    xlabel(strcat('Time in ', measure))
     title(sprintf('Mining of %d transactions by %d miners', nb_transactions, nb_proc));
     set(gca,'YTick',[])
     hold off
