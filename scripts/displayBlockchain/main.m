@@ -209,7 +209,7 @@ for j = 1 : size(longest_chain, 2) / nb_blocks
     axis equal
     xlim([times(1+(j-1)*nb_blocks)-square_size times(i)+2*square_size])
     ylim([square_y-square_size square_y+20*square_size])
-    xlabel(strcat('Time in ', unit))
+    xlabel(strcat('Time in ', {' '}, unit))
     title(sprintf('Mining of %d transactions by %d miners', nb_transactions, nb_proc));
     set(gca,'YTick',[])
     hold off
