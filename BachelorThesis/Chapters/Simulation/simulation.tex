@@ -2,7 +2,7 @@ As explained in the previous part, we've created classes to represent some featu
 
 \section{Sequential code}
 
-Then, the first version of the code is about making these objects to work together. This is a sequential version where, at the end, we have one miner able to create blocks, mine them and build his blockchain.
+Then, the first version of the code is about making these objects to work together. This is a sequential version where, in the end, we have one miner able to create blocks, mine them and build his blockchain.
 
 When the job is done, we display the state of the blockchain: \newline
 
@@ -19,11 +19,11 @@ We don't further in the analysis because the objective is to parallelize this co
 
 \paragraph{Transactions management}
 
-As we mentioned, the transactions management is simplified. So we decide to generate transactions with our specific generator and to communicate these transactions to all the miners. \newline
+As we mentioned, transaction management is simplified. So we decide to generate transactions with our specific generator and to communicate these transactions to all the miners. \newline
 
 Thus, the first challenge is to generate and broadcast transactions. We arbitrary choose the miner 0 to generate the transactions, then he will serialize and broadcast them to the other miners.
 
-In the same time, we manage the reception of these transactions by the others. They deserialize them and push them to their mempool. \newline
+At the same time, we manage the reception of these transactions by the others. They deserialize them and push them to their mempool. \newline
 
 \paragraph{Communication through the network}
 
@@ -76,7 +76,7 @@ The more important challenge is to make the miners communicate about blocks they
           \IF{The new block and the current one are the same}
             \STATE We sent back this chain
           \ELSIF {The new block is the next of the current one}
-            \STATE We create a fork chain including the new block
+            \STATE We create a forked chain including the new block
             \STATE We sort our chains
             \STATE We send our version of the chain
           \ENDIF
@@ -92,7 +92,7 @@ The more important challenge is to make the miners communicate about blocks they
 
 \paragraph{Tests}
 
-It's important to regularly test our code, especially to check if the communications are complete because this kind of error is quite hard to detect. There are some dedicated libraries to test our code but, in our case, we used a direct way by implementing functions to test our functions and print the results so we can check if everything is alright. \newline
+It's important to regularly test our code, especially to check if the communications are complete because this kind of error is quite hard to detect. There are some dedicated libraries to test our code but, in our case, we used a direct way by implementing functions to test our functions and print the results so we can check if everything is all right. \newline
 
 We can test sending and receiving a block, a blockchain or an empty blockchain. This increases our confidence in the code robustness.
 
@@ -100,7 +100,7 @@ We can test sending and receiving a block, a blockchain or an empty blockchain. 
 
 We've seen that the computational power of a miner is important because the higher his computational power the faster he will mine. Then, we created a code to estimate the frequency of a miner. \newline
 
-To estimate the frequency, we use the instruction RDTSC (ReaD Time Stamp Counter) which read the value of the register TSC. This register counts the number of cycles since last reset. So we use the following algorithm to compute the number of cycles in 1 second: \newline
+To estimate the frequency, we use the instruction RDTSC (ReaD Time Stamp Counter) which read the value of the register TSC. This register counts the number of cycles since the last reset. So we use the following algorithm to compute the number of cycles in 1 second: \newline
 
 \begin{algorithm}
   \caption{Frequency estimation}
@@ -115,7 +115,7 @@ To estimate the frequency, we use the instruction RDTSC (ReaD Time Stamp Counter
 
 \paragraph{Logs}
 
-All along the code, we write information in logs file to help analyze the blockchain at the end. For example: \newline
+All along the code, we write information in the log files to help analyze the blockchain at the end. For example: \newline
 
 \begin{itemize}
   \item {[freq]} 2.4225  $\rightarrow$ Indicates the miner computational power in GHz.
@@ -153,11 +153,11 @@ We also write a general log file with the following data: \newline
   \item We read the file of each miner to get his frequency, the block mined and the blockchains.
   \item From the longest chain, we determine which miner has won a reward.
   \item We extract the data to display the timeline of the longest blockchain.
-  \item We extract the times at where the blocks were mined to compute statistics.
+  \item We extract the times where the blocks were mined to compute statistics.
 \end{enumerate}
 \medskip
 
-At the end, we display a table summing up the rewards and the forks of each miner, another table with statistics about the time needed to mine blocks and a timeline of the blockchain 10 blocks by 10 blocks. \newline
+In the end, we display a table summing up the rewards and the forks of each miner, another table with statistics about the time needed to mine blocks and a timeline of the blockchain 10 blocks by 10 blocks. \newline
 
 The following results were produced on the Geneva University cluster with a target starting with 5 zeros.
 
@@ -170,9 +170,9 @@ This table is interesting in two points: \newline
 
   In our case, all miners have the same frequency because they were all located on the same node of the cluster.
 
-  \item To observe the number of forks because this number is directly linked to the number of messages. If the number of forks is low, it means the consensus was obtained straight forward. In the other hand, if this number is high, it means the miners exchanged a lot of messages and probably wasted time on mining blocks which were finally not in the longest chain. \newline
+  \item To observe the number of forks because this number is directly linked to the number of messages. If the number of forks is low, it means the consensus was obtained straight forward. On the other hand, if this number is high, it means the miners exchanged a lot of messages and probably wasted time on mining blocks which were finally not in the longest chain. \newline
 
-  In our case, we see the number of forks is 1 for all miners so it means that our algorithm works well and the miners didn't work for nothing.
+  In our case, we see the number of forks is 1 for all miners so it means that our algorithm works well.
 \end{enumerate}
 
 \begin{figure}[ht]
@@ -184,7 +184,7 @@ This table is interesting in two points: \newline
 
 \paragraph{Analysis of the statistics table}
 
-We can observe that the range is quite wide, from $\approx$ 9 minutes to 7 seconds, it means that some miners mined a block very quickly whereas some others took more time. This is because we choose the nonce in an uniform distribution so it's totally possible to obtain a right nonce after a few tries only. \newline
+We can observe that the range is quite wide, from $\approx$ 9 minutes to 7 seconds, it means that some miners mined a block very quickly whereas some others took more time. This is because we choose the nonce in a uniform distribution so it's completely possible to obtain a right nonce after a few tries only. \newline
 
 We can also note that the average time to mine a block is around 1 minute and 48 seconds, it's an arbitrary choice compared to the 10 minutes for the original blockchain.
 \clearpage
@@ -200,7 +200,7 @@ We can also note that the average time to mine a block is around 1 minute and 48
 
 \paragraph{Analysis of the timeline}
 
-When we study a new technology, it's always interesting to look at its evolution in time. We choose the longest chain, in our case, there is only on fork so it's easy to choose. We display the blocks, 10 by 10, according to the time they were mined.
+When we study a new technical object, it's always interesting to look at its evolution in time. We choose the longest chain, in our case, there is only one fork so it's easy to choose. We display the blocks, 10 by 10, according to the time they were mined.
 
 \begin{figure}[ht]
 \centering
@@ -210,7 +210,7 @@ When we study a new technology, it's always interesting to look at its evolution
 \medskip
 
 
-\section{Can we improve our model ?} \label{improvements}
+\section{Can we improve our model?} \label{improvements}
 
 Here are some ideas to improve our simulation: \newline
 
@@ -220,11 +220,11 @@ Here are some ideas to improve our simulation: \newline
   \begin{figure}[ht]
   \centering
   \includegraphics[width=8cm]{Figures/matrix}
-  \caption{Example of adjacency matrix}
+  \caption{Example of an adjacency matrix}
   \end{figure}
   \medskip
 
-  An adjacency matrix is a symmetrical matrix where 1 in the position (i, j) indicates that the miner i and j are neighbors. For example, in the figure above, the miner 1 and n are neighbors but not the miner 1 and 2. \newline
+  An adjacency matrix is symmetrical and 1 in the position (i, j) indicates that the miner i and j are neighbors. For example, in the figure above, the miner 1 and n are neighbors but not the miner 1 and 2. \newline
 
   With this method, we could try several network structures and analyze their influence on the mining process.
 
