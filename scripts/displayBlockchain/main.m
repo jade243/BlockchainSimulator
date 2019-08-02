@@ -15,9 +15,13 @@ close all
 % seconds (by 1000), minutes (by 60,000), ...
 div_time = 1000; 
 square_size = 50;
-measure = 'seconds';
+unit = 'seconds';
 
-%%
+%% We clean the repository
+
+delete rewards.png stats.png timeline*
+
+%% We read the files
 
 % First, let's check filenames and get their prefix 
 [prefix, fileList] = check_logs_filenames();
@@ -126,7 +130,7 @@ for i = 1 : nb_proc
    names{i} = ['Proc ' int2str(i)];
 end
 
-clearvars -except final_time nb_proc nb_transactions procs names div_time square_size measure
+clearvars -except final_time nb_proc nb_transactions procs names div_time square_size unit
 
 %% We've extracted all data from the logs
 
@@ -142,11 +146,11 @@ miners = fliplr(miners);
 times = fliplr(times);
 
 var_times = {'Unit', 'Minimum', 'Maximum', 'Range', 'Mean', 'Median'};
-T_times = table({measure}, min(times)/div_time, max(times)/div_time, ...
+T_times = table({unit}, min(times)/div_time, max(times)/div_time, ...
             (max(times)-min(times))/div_time, mean(times)/div_time, ...
             median(times)/div_time, 'VariableNames', var_times);
 
-clearvars -except final_time nb_proc nb_transactions procs names div_time square_size measure T T_times longest_chain miners times
+clearvars -except final_time nb_proc nb_transactions procs names div_time square_size unit T T_times longest_chain miners times
 
 %% We've created all needed variables
 
@@ -205,7 +209,7 @@ for j = 1 : size(longest_chain, 2) / nb_blocks
     axis equal
     xlim([times(1+(j-1)*nb_blocks)-square_size times(i)+2*square_size])
     ylim([square_y-square_size square_y+20*square_size])
-    xlabel(strcat('Time in ', measure))
+    xlabel(strcat('Time in ', unit))
     title(sprintf('Mining of %d transactions by %d miners', nb_transactions, nb_proc));
     set(gca,'YTick',[])
     hold off
