@@ -144,13 +144,14 @@ longest_chain = get_longest_chain(procs);
 longest_chain = fliplr(longest_chain);
 miners = fliplr(miners);
 times = fliplr(times);
+durations = times - [0 times(1 : end-1)];
 
 var_times = {'Unit', 'Minimum', 'Maximum', 'Range', 'Mean', 'Median'};
-T_times = table({unit}, min(times)/div_time, max(times)/div_time, ...
-            (max(times)-min(times))/div_time, mean(times)/div_time, ...
-            median(times)/div_time, 'VariableNames', var_times);
+T_times = table({unit}, min(durations)/div_time, max(durations)/div_time, ...
+            (max(durations)-min(durations))/div_time, mean(durations)/div_time, ...
+            median(durations)/div_time, 'VariableNames', var_times);
 
-clearvars -except final_time nb_proc nb_transactions procs names div_time square_size unit T T_times longest_chain miners times
+clearvars -except final_time nb_proc nb_transactions procs names div_time square_size unit durations T T_times longest_chain miners times
 
 %% We've created all needed variables
 
@@ -217,7 +218,7 @@ for j = 1 : size(longest_chain, 2) / nb_blocks
     saveas(gcf,strcat('timeline_', int2str(j), '.png'))
 end
 
-clearvars -except final_time nb_proc nb_transactions procs names T longest_chain miners times
+clearvars -except final_time nb_proc nb_transactions procs names T longest_chain miners times durations
 
 
 
