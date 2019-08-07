@@ -17,7 +17,7 @@ Each node has three responsibilities :
 
 \begin{itemize}
   \item Keeping a copy of confirmed transactions, which is the blockchain itself.
-  \item Validating a transaction if it's following the rules.
+  \item Validating transaction compliance.
   \item Sharing information with their neighbors such as unconfirmed but valid transactions and mined blocks.
 \end{itemize}
 
@@ -29,7 +29,7 @@ Each node has three responsibilities :
 
 We've written a C++ code to simulate blockchains focusing on the mining process. The code is written in C++ using the library MPI to parallelize the process. Moreover, the executions were made on the Geneva University cluster to truly parallelize the code.
 
-A full part is dedicated to the results we found in these simulations. \newline
+A full chapter of this work is dedicated to the results we found in these simulations. \newline
 
 Thus, we can simulate several miners trying to mine blocks and keep the blockchain synchronized. The goal is to deeply understand the network structure and to observe the evolution of the blockchain in the time. \newline
 
@@ -91,7 +91,7 @@ To generate those transactions, we've created a specific generator which creates
 
   \subsection{Block}
 
-Now that we have a transaction, we can transmit it to a node of the network. There, it needs to pass verification and if it's correct, it will be broadcast to other nodes. \newline
+Now that we have a transaction, we can transmit it to a node of the network. There, it needs to pass verification and if it's correct, it will be broadcasted to other nodes. \newline
 
 Once the transaction is accepted by a node, it will stay in a special area called the Mempool (Memory pool), this is where all unconfirmed transactions wait to be added in a block. A node can prioritize the transactions in its Mempool, especially if he's running out of memory, he can choose the order of arrival or, more probably, the highest transaction fee.
 
@@ -178,12 +178,13 @@ The version is always the same in our simulation because it won't affect mining.
   \centering
   \includegraphics[width=\textwidth]{Figures/merkleTree}
   \caption{A Merkle tree}
+  \label{merkleTree}
   \end{figure}
   \medskip
 
   The main advantage of this technology is the speed and the ease to verify if a transaction belongs to a block. We don't need to know all transactions of the block and we don't even need to reveal any data from the transactions but only their hashes. \newline
 
-  For example, if we want to check if the transaction 3 belongs to the block in our previous figure. We have to know its hash (Hash 3), Hash 4, Hash 12 and Hash 56. With those hashes, we can reconstruct the Merkle root. If it's the same, this means that the transaction 3 belongs to the block and that no transaction has been modified so the whole block is correct.
+  For example, if we want to check if the transaction 3 belongs to the block in our previous figure. We have to know its hash (Hash 3), Hash 4, Hash 12 and Hash 56 (see \ref{merkleTree}). With those hashes, we can reconstruct the Merkle root. If it's the same, this means that the transaction 3 belongs to the block and that no transaction has been modified so the whole block is correct.
 
 
   \begin{aside}
@@ -221,13 +222,13 @@ The version is always the same in our simulation because it won't affect mining.
   \caption{Fork chains}
   \end{figure}
 
-  The blockchain is always the longest chain created because it's the one that has requested more work of mining. This means that to have control over the blockchain, an attacker should have the majority of the computational power (at least 51\%). \newline
+  The blockchain is always the longest chain created because it's the one that has required more mining work. This means that to have control over the blockchain, an attacker should have the majority of the computational power (at least 51\%). \newline
 
   \begin{aside}
 
   \paragraph{C++ code}
 
-  As we said, the network is composed of miners so we implement mines as an object with the following fields: \newline
+  As we said, the network is composed of miners so we implement miners as an object with the following fields: \newline
 
   \begin{itemize}
     \item An ID

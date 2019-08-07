@@ -1,4 +1,4 @@
-As explained in the previous part, we've created classes to represent some features related to blockchains. Thus, we can instantiate miners, blocks, block headers and blockchains.
+As explained in the previous chapter, we've created classes to represent some features related to blockchains. Thus, we can instantiate miners, blocks, block headers and blockchains.
 
 \section{Sequential code}
 
@@ -13,7 +13,7 @@ When the job is done, we display the state of the blockchain: \newline
 \end{figure}
 \medskip
 
-We don't further in the analysis because the objective is to parallelize this code.
+We don't concentrate further in the analysis because the objective is to parallelize this code.
 
 \section{Parallel code}
 
@@ -23,11 +23,11 @@ As we mentioned, transaction management is simplified. So we decide to generate 
 
 Thus, the first challenge is to generate and broadcast transactions. We arbitrary choose the miner 0 to generate the transactions, then he will serialize and broadcast them to the other miners.
 
-At the same time, we manage the reception of these transactions by the others. They deserialize them and push them to their mempool. \newline
+At the same time, we manage the reception of these transactions by the others miners. They deserialize them and push them to their mempool. \newline
 
 \paragraph{Communication through the network}
 
-The more important challenge is to make the miners communicate about blocks they discovered. To do so, we created the following algorithm:
+The most important challenge is to make the miners communicate about blocks they discovered. To do so, we created the following algorithm:
 
 \clearpage
 
@@ -92,15 +92,15 @@ The more important challenge is to make the miners communicate about blocks they
 
 \paragraph{Tests}
 
-It's important to regularly test our code, especially to check if the communications are complete because this kind of error is quite hard to detect. There are some dedicated libraries to test our code but, in our case, we used a direct way by implementing functions to test our functions and print the results so we can check if everything is all right. \newline
+It's important to regularly test our code, especially to check if the communications are complete because this kind of error is quite hard to detect. There are some dedicated libraries to test our code but, in our case, we used a direct way by implementing controls to test our functions and print the results so we can check the correctness of our system. \newline
 
 We can test sending and receiving a block, a blockchain or an empty blockchain. This increases our confidence in the code robustness.
 
 \paragraph{Frequency estimation}
 
-We've seen that the computational power of a miner is important because the higher his computational power the faster he will mine. Then, we created a code to estimate the frequency of a miner. \newline
+We've seen that the computational power of a miner is important because the higher his computational power the faster it will mine. Then, we created a code to estimate the frequency of a miner. \newline
 
-To estimate the frequency, we use the instruction RDTSC (ReaD Time Stamp Counter) which read the value of the register TSC. This register counts the number of cycles since the last reset. So we use the following algorithm to compute the number of cycles in 1 second: \newline
+To estimate the frequency, we use the instruction RDTSC (ReaD Time Stamp Counter) which reads the value of the register TSC. This register counts the number of cycles since the last reset. So we use the following algorithm to compute the number of cycles in 1 second: \newline
 
 \begin{algorithm}
   \caption{Frequency estimation}
@@ -120,7 +120,7 @@ All along the code, we write information in the log files to help analyze the bl
 \begin{itemize}
   \item {[freq]} 2.4225  $\rightarrow$ Indicates the miner computational power in GHz.
   \item {[Tue Jul 23 17:40:48 2019]} 3fd2146979 26027 $\rightarrow$ Indicates the miner has mined a block with the exact time, the block ID and the duration in milliseconds.
-  \item {[nbChains]} 1 $\rightarrow$ Indicates the number of forks chains the miner has made.
+  \item {[nbChains]} 1 $\rightarrow$ Indicates the number of forked chains the miner has made.
   \item {[i]} 47a9270fb6 $\rightarrow$ Indicates the beginning of the ith chain and its first block.
 \end{itemize}
 \medskip
@@ -166,13 +166,13 @@ The following results were produced on the Geneva University cluster with a targ
 This table is interesting in two points: \newline
 
 \begin{enumerate}
-  \item To analyze if the frequency and the number of rewards are correlated. In reality, the more a miner has computational power, the faster he should mine. \newline
+  \item To analyze if the frequency and the number of rewards are correlated. The more a miner has computational power, the faster it should mine. \newline
 
   In our case, all miners have the same frequency because they were all located on the same node of the cluster.
 
   \item To observe the number of forks because this number is directly linked to the number of messages. If the number of forks is low, it means the consensus was obtained straight forward. On the other hand, if this number is high, it means the miners exchanged a lot of messages and probably wasted time on mining blocks which were finally not in the longest chain. \newline
 
-  In our case, we see the number of forks is 1 for all miners so it means that our algorithm works well.
+  In our case, we see the number of forks is 1 for all miners so it means that our algorithm is efficient.
 \end{enumerate}
 
 \begin{figure}[ht]
@@ -200,7 +200,7 @@ We can also note that the average time to mine a block is around 1 minute and 48
 
 \paragraph{Analysis of the timeline}
 
-When we study a new technical object, it's always interesting to look at its evolution in time. We choose the longest chain, in our case, there is only one fork so it's easy to choose. We display the blocks, 10 by 10, according to the time they were mined.
+We want to see the evolution in time of the longest chain produced by our system. We display the blocks, 10 by 10, according to the time they were mined.
 
 \begin{figure}[ht]
 \centering
@@ -228,12 +228,12 @@ Here are some ideas to improve our simulation: \newline
 
   With this method, we could try several network structures and analyze their influence on the mining process.
 
-  \item The possibility to create pools. We could create a function which defines if a miner belongs in a pool or not: \newline
+  \item The possibility to create pools. We could create a function which defines if a miner belongs to a pool or not: \newline
 
   \[
     isInPool(miner) =
     \begin{cases}
-      0, & \text{if the miner doesn't belong in a pool}  \\
+      0, & \text{if the miner doesn't belong to a pool}  \\
       i > 0, & \text{if the miner belongs to the pool i} \\
     \end{cases}
   \]

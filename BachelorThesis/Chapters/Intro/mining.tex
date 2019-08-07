@@ -1,4 +1,4 @@
-\section{Mining in blockchain} \label{mining}
+\section{Blockchain mining} \label{mining}
 
 In this section, we give a general view of the mining process and the math involved.
 
@@ -26,9 +26,9 @@ Target : 0x12\textcolor{orange}{07e540} \newline
 
 This will give us : \textcolor{orange}{07e540}000000000000000000000000000000 . \newline
 
-The miners have to find a hash lower than the target value. We can see this condition from another angle, the hash will be 256 bits (64 bytes) long but the target is shorter. So there is a difference of bits, let's note d, this means that the hash will have to start with at least d zeros to fit the condition. \newline
+The miners have to find a hash lower than the target value. We can see this condition from another angle, the hash will be 256 bits (32 bytes) long but the target is shorter. So there is a difference of bits, let's note d, this means that the hash will have to start with at least d zeros to fit the condition. \newline
 
-The target is not chosen randomly, it is set so a block will take about 10 minutes to be mined. This way, the number of blocks added in the network is controlled and it let enough time for the mined blocks to be broadcast on the network.
+The target is not chosen randomly, it is set so a block will take about 10 minutes to be mined. This way, the number of blocks added in the network is controlled and allows enough time for the mined blocks to be broadcasted on the network.
 
 The difficulty is updated about every two weeks, every 2016 blocks exactly. It depends on the expected time (2016 x 10 minutes) and the actual time.
 
@@ -44,14 +44,14 @@ Then, we have a working protocol for mining but one can wonder why nodes will be
 
 It's quite simple actually, once a node has mined a block, he receives a reward (in Bitcoin if he works for Bitcoin blockchain). This is a way to motivate miners to work according to the rules for the blockchain. \newline
 
-Miners have also another way of winning money, the payers can add a fee to their transaction. This transaction fee will be taken by the miner which confirms the transaction in a mined block.
+Miners have also another way of earning money, the payers may add a fee to their transaction. This transaction fee will be taken by the miner which confirms the transaction in a mined block.
 
 As we've seen before, miners have a Mempool and they will prioritize the transactions according to the fees they can obtain. This is a way for payers to speed up transactions in the network which is often highly congested.
 
 
   \subsection{Hash functions}
 
-In this paper, we'll analyze the potential consequences if the hashing function for mining is broken. So let's recall some properties about hashing functions. \newline
+In this work, we'll analyze the potential consequences if the hashing function for mining is broken. So let's recall some properties about hashing functions. \newline
 
 The function used by mining is $H_M(x) = SHA256(SHA256(x))$.
 
@@ -62,5 +62,5 @@ More precisely, hash functions, like SHA256, hold three properties: \newline
 \begin{enumerate}
   \item Pre-image resistance: knowing $y_1$, it's difficult to find $x_1$ such that $h(x_1) = y_1$.
   \item Second pre-image resistance: knowing $x_1$, it's difficult to find $x_2$ such that $h(x_1) = h(x_2)$.
-  \item Collision resistance: it's difficult to find $x_1$ and $x_2$ such that $h(x_1) = h(x_2)$.
+  \item Collision resistance: it's difficult to find pairs $(x_1, x_2)$ such that $h(x_1) = h(x_2)$.
 \end{enumerate}

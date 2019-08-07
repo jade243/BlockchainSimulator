@@ -1,4 +1,4 @@
-We know that mining is based on SHA256 so, in this part, we'll see different techniques (inspired by \cite{broken_crypto_primitives}) to win against traditional mining if SHA256 is broken.
+We know that mining is based on SHA256 so, in this part, we'll see different techniques (inspired by \cite{broken_crypto_primitives}) to defeat traditional mining if SHA256 is broken.
 
 \section{Pre-image with fixed Merkle root}
 
@@ -26,7 +26,7 @@ An attacker can control $b = 13 + 28 + 32 = 73$ bits on the input value, which m
 
 The result of $H_M$ is a hash from SHA256, so it has a length of $n = 256$ bits and there are $2^n$ possibilities of outputs. \newline
 
-Then, we've seen that to fulfill the condition given by the target, the hash needs to start with a specific number of zeros, let's note d zeros.
+Then, in order to fulfill the condition given by the target, the hash needs to start with a specific number of zeros, let's note d zeros.
 
 In reality, matching with the coefficient may require more effort (see \ref{appendixTarget} for more details). \newline
 
@@ -65,6 +65,6 @@ P_{success} = 2^a \times 2^{b-n} = 2^{a + b - n}
 \end{equation}
 \newline
 
-Finally, we can estimate this probability of success. Let's take $a = 80$ so the attacker has $2^{80}$ tries (above this value, he may need more than 10 minutes to complete his attack). So, we have $P_{success} = 2^{80+73-256} = 2^{-103} \approx 10^{-32}$, which completely negligible.
+Finally, we can estimate this probability of success. Let's take $a = 80$ so the attacker has $2^{80}$ tries (above this value, he may need more than 10 minutes to complete his attack). So, we have $P_{success} = 2^{80+73-256} = 2^{-103} \approx 10^{-32}$, which is completely negligible.
 
 Then, we can conclude that having a simple pre-image oracle doesn't help to break mining.

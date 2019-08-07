@@ -5,7 +5,7 @@
 
 In reality, a hash function breakage can imply more powerful tools than a simple pre-image oracle. To cover this possibility, we can construct a general oracle (see \cite{broken_crypto_primitives}). \newline
 
-This oracle takes as input : $(a, b, y_l, y_i, i, s) = (prefix, suffix, target\_low, target\_high, position, length)$. It will returns $x_i$ such that : $y_l <= h(a || x_i || b) <= y_h$ or none (if there is no pre-image). \newline
+This oracle takes as input : $(a, b, y_l, y_i, i, s) = (prefix, suffix, target\_low, target\_high, position, length)$. It will return $x_i$ such that : $y_l <= h(a || x_i || b) <= y_h$ or none (if there is no pre-image). \newline
 
 In other words, the prefix, suffix and length of the pre-image are fixed, this allows us to have control over the format of the pre-image and, in our context, to fix some fields of the block header. The value will be between a target range, this will help us satisfy the condition given by the target.
 
@@ -20,4 +20,4 @@ An attacker with access to our bounded oracle can simply call for $(headerBeginn
 
 For recall, the target is 256 bits long, the block header is 32 bits and the headerBeginning is the beginning of the block header until the nonce. This will return a pre-image of 32 bits with the first fields of the block header and a correct nonce such that the hash is under the target value. \newline
 
-This kind of attack will completely break mining, which allows the attacker to create deep forks and then, reversing transactions or double-spend.
+This kind of attack will completely break mining, which allows the attacker to create deep forks and then, reverse transactions or double-spend.

@@ -29,7 +29,7 @@ This idea would be to change the transactions in a block by getting a Merkle roo
 
     \paragraph{New added blocks}
 
-However, the situation is different if the adversary focuses on the last block. The attacker can create a new block with different transactions but the same Merkle root. Even if, this newly created block is invalid, the attacker can send it in the network and this may cause the nodes to reject both blocks or even to accept the invalid block.
+However, the situation is different if the adversary focuses on the last block. The attacker can create a new block with different transactions but the same Merkle root. Even if, this newly created block is invalid, the attacker can send it to the network and this may cause the nodes to reject both blocks or even to accept the invalid block.
 
 This attack was done in July 2015 (\cite{mining_attack}), nodes were accepting invalid blocks and then, validating wrong transactions. Nowadays, a new version of the protocol has been released and these problems are solved. \newline
 
